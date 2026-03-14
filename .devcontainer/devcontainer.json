@@ -1,0 +1,22 @@
+{
+    "name": "Node.js",
+    "dockerComposeFile": "compose.yml",
+    "service": "nodejs-devcontainer",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "features": {
+        "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+        "packages": ["postgresql-client"]
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "svelte.svelte-vscode",
+                "ms-ossdata.vscode-pgsql",
+                "Lokalise.i18n-ally"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install -g npm@latest"
+}
