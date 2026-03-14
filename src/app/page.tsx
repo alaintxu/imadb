@@ -1,7 +1,7 @@
 import { getAllSets } from '../lib/sets/sets';
-import type { CardSet } from '../lib/sets/set_types';
+import type { CardSet } from '../store/entities/sets';
 import Table from "../components/Table";
-import VillainPage from "./villain_page";
+import IMAForm from "./ima_form";
 
 export default async function Home() {
   const sets: CardSet[] = await getAllSets();
@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <>
-    <VillainPage />
+    <IMAForm />
     <Table headers={table_headers} data={table_data} rowsPerPage={15} filter={[2]} />
     </>
   );

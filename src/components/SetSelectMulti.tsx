@@ -1,73 +1,70 @@
 "use client";
-import type { CardSet, CardSetType } from '../lib/sets/set_types';
+import type { CardSet, CardSetType } from '@/store/entities/sets';
+import { colorStyles } from './SetSelect';
+import { loadSets } from '@/store/entities/sets';
+import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
 import type { MultiValue } from 'react-select';
-import AsyncSelect from 'react-select/async';
-import { useCallback, useState } from 'react';
+import Select from 'react-select';
+import { useState, useEffect } from 'react';
+import type { SetOption } from './SetSelect';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 
 
 export default function SetSelectMulti({
     onSelectChange,
     defaultSetCodes,
     setType = '',
-
+    className = ''
  }: {
     onSelectChange: (sets: CardSet[]) => void,
     defaultSetCodes?: string[],
     setType?: CardSetType|"",
+    className?: string
 }) {
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(loadSets());
+    }, [dispatch]);
 
-    type SetOption = {
-        value: string;
-        label: string;
-        set: CardSet;
-    };
+    const sets: CardSet[] = useAppSelector(state => selectSetsByType(setType)(state));
 
-    const [selectedOptions, setSelectedOptions] = useState<SetOption[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const isLoading: boolean = useAppSelector(selectIsLoading);
+    const options: SetOption[] = sets.map((cardSet) => ({
+        value: cardSet.code,
+        label: cardSet.name,
+        set: cardSet,
+    }));
 
-    const loadOptions = useCallback(async (): Promise<SetOption[]> => {
-        setIsLoading(true);
-        const response = await fetch(`/api/sets/${setType}`);
-        if (!response.ok) {
-            return [];
-        }
+    const [userSelectedOptions, setUserSelectedOptions] = useState<SetOption[]|null>(null);
 
-        const sets = (await response.json()) as CardSet[];
-        const options = sets.map((cardSet) => ({
-            value: cardSet.code,
-            label: cardSet.name,
-            set: cardSet,
-        }));
-
-        if(defaultSetCodes && defaultSetCodes.length > 0){
-            const defaultOptions = options.filter((option) => defaultSetCodes.includes(option.value))
-            setSelectedOptions(defaultOptions);
-            onSelectChange(defaultOptions.map((option) => option.set)); // Notify parent of default selections
-
-        }
-        setIsLoading(false);
-        return options;
-    }, [setType, setSelectedOptions, defaultSetCodes, setIsLoading, onSelectChange]);
+    const selectedOptions: SetOption[] = userSelectedOptions !== undefined ? userSelectedOptions
+        : options.filter(option => defaultSetCodes?.includes(option.value)) || [];
 
     const handleChange = (selected: MultiValue<SetOption>) => {
-        setSelectedOptions([...selected]);
+        setUserSelectedOptions([...selected]);
         onSelectChange(selected.map((option) => option.set));
     };
 
+    useEffect(() => {
+        if(userSelectedOptions !== null) return;
+        if(defaultSetCodes)
+            onSelectChange(options.filter(option => defaultSetCodes?.includes(option.value)).map(option => option.set));
+    }, [defaultSetCodes, options, onSelectChange, userSelectedOptions]);
+
 
     return (
-        <div className="villain-select">
-            
-            <AsyncSelect
+        <div className={`${className} villain-select`}>
+            {isLoading ? (<div>Loading...</div>) : (
+            <Select
                 isMulti
-                cacheOptions
-                defaultOptions
-                loadOptions={loadOptions}
+                options={options}
                 onChange={handleChange}
                 placeholder={isLoading ? "loading" : `Search ${setType} sets...`}
                 noOptionsMessage={() => "No sets found"}
                 value={selectedOptions}
+                styles={colorStyles}
             />
+            )}
         </div>
     );
 }

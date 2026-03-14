@@ -3,6 +3,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /*
+Usage,Color Name,OKLCH Value,Character/Vibe
+Primary,Biohazard Yellow,oklch(88% 0.19 95),The classic A.I.M. jumpsuit color.
+Accent,Hive Orange,oklch(75% 0.18 70),For hover states and warnings.
+Dark,Deep Shadow,oklch(18% 0.02 260),"The sinister, ""black-ops"" dark grey."
+Surface,Lab Slate,oklch(35% 0.04 260),Industrial surfaces and containers.
+Light,Sterile White,oklch(97% 0.01 95),Laboratory backgrounds and high-tech text.
+Alert,Rad-Level Red,oklch(60% 0.22 25),Scientific emergency/containment alerts.
+  */
+  --color-primary: oklch(88% 0.19 95); /* Biohazard Yellow */
+  --color-accent: oklch(75% 0.18 70); /* Hive Orange */
+  --color-dark: oklch(18% 0.02 260); /* Deep Shadow */
+  --color-surface: oklch(35% 0.04 260); /* Lab Slate */
+  --color-light: oklch(97% 0.01 95); /* Sterile White */
+  --color-alert: oklch(60% 0.22 25); /* Rad-Level Red */
 }
 
 @theme inline {
