@@ -1,22 +1,14 @@
 {
     "name": "Node.js",
-    "dockerComposeFile": "compose.yml",
-    "service": "nodejs-devcontainer",
-    "workspaceFolder": "/workspace",
-    "shutdownAction": "stopCompose",
-    "features": {
-        "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-        "packages": ["postgresql-client"]
-        }
-    },
+    "image": "registry.gitlab.com/mu-bd-ce/devcontainers/nodejs:latest",
     "customizations": {
         "vscode": {
             "extensions": [
-                "svelte.svelte-vscode",
-                "ms-ossdata.vscode-pgsql",
-                "Lokalise.i18n-ally"
+                "Lokalise.i18n-ally",
+                "dsznajder.es7-react-js-snippets"
             ]
         }
     },
-    "postCreateCommand": "npm install -g npm@latest"
+	"runArgs": ["--sysctl", "net.ipv6.conf.all.disable_ipv6=1"],
+    "postCreateCommand": "npm install -g npm@latest && npm install"
 }
