@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Middleware, Dispatch } from "redux";
-import { RootState } from "../configureStore";
 import * as apiActions from "../api";
+import { RootState } from "../reducer";
 //import i18n from 'i18next';
 
 
-type ApiMiddlewareParams = {
+/*type ApiMiddlewareParams = {
     dispatch: Dispatch;
     getState: () => RootState;
-}
+}*/
 
 const dispatchError = (dispatch: Dispatch, error: any, onError: string, payload?: any) => {
     console.error("Error fetching data", error);
@@ -25,7 +25,7 @@ const dispatchCheckingArray = (onAction: string | string[], dispatch: Dispatch, 
     }
 }
 
-const api: Middleware<ApiMiddlewareParams> = ({ dispatch }) => (next) => async (action: any) => {
+const api: Middleware<unknown, RootState> = ({ dispatch }) => (next) => async (action: any) => {
     if (action.type !== apiActions.apiCallBegan.type) return next(action);
 
     const { 

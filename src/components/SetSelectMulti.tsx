@@ -1,7 +1,7 @@
 "use client";
 import type { CardSet, CardSetType } from '@/store/entities/sets';
 import { colorStyles } from './SetSelect';
-import { loadSets } from '@/store/entities/sets';
+import { loadSets, selectAllSets } from '@/store/entities/sets';
 import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
 import type { MultiValue } from 'react-select';
 import Select from 'react-select';
@@ -26,7 +26,7 @@ export default function SetSelectMulti({
         dispatch(loadSets());
     }, [dispatch]);
 
-    const sets: CardSet[] = useAppSelector(state => selectSetsByType(setType)(state));
+    const sets: CardSet[] = useAppSelector(state => setType !== "" ? selectSetsByType(setType)(state) : selectAllSets(state));
 
     const isLoading: boolean = useAppSelector(selectIsLoading);
     const options: SetOption[] = sets.map((cardSet) => ({
@@ -37,7 +37,7 @@ export default function SetSelectMulti({
 
     const [userSelectedOptions, setUserSelectedOptions] = useState<SetOption[]|null>(null);
 
-    const selectedOptions: SetOption[] = userSelectedOptions !== undefined ? userSelectedOptions
+    const selectedOptions: SetOption[] = userSelectedOptions !== null ? userSelectedOptions
         : options.filter(option => defaultSetCodes?.includes(option.value)) || [];
 
     const handleChange = (selected: MultiValue<SetOption>) => {

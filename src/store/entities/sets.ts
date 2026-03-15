@@ -1,7 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from '../configureStore';
+import { AppThunk } from '../configureStore';
 import { apiCallBegan } from '../api';
 import moment, { Moment } from 'moment';
+import { RootState } from '../reducer';
 
 export type CardSetType = 'level' | 'villain' | 'modular' | 'nemesis' | 'unknown' | 'other';
 
@@ -175,7 +176,7 @@ const {
 
 
 /* Action creators */
-export const loadSets = () => (dispatch: AppDispatch, getState: () => RootState) => {
+export const loadSets = (): AppThunk => (dispatch, getState) => {
 
     /*
     ** Get list of sets from the database (using api)

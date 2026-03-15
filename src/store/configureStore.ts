@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
-import reducer from './reducer';
+import { configureStore, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
+import reducer, {type RootState } from './reducer';
 import api from './middleware/api';
 
-export const createStore = (preloadedState?: any):EnhancedStore => configureStore({
+export const createStore = (preloadedState?: any) => configureStore({
     reducer: reducer,
     devTools: true,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
@@ -14,8 +14,10 @@ export const createStore = (preloadedState?: any):EnhancedStore => configureStor
 
 const store = createStore();
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export type AppStore = typeof store;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, UnknownAction>;
+export type { RootState };
+
 
 export default store;

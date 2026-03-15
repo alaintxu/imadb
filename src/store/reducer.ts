@@ -2,7 +2,10 @@ import { combineReducers } from 'redux';
 import entitiesReducer from './entities/reducer';
 //import uiReducer from './ui/reducer';
 
-export default combineReducers({
+const rootReducer = combineReducers({
     entities: entitiesReducer,
     //ui: uiReducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
+export default rootReducer;

@@ -1,41 +1,41 @@
 "use client";
 import type { CardSet, CardSetType } from '@/store/entities/sets';
-import { loadSets } from '@/store/entities/sets';
+import { loadSets, selectAllSets } from '@/store/entities/sets';
 import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
-
-export const colorStyles: StylesConfig<ColourOption, true> = {
-        control: (styles) => ({ ...styles, backgroundColor: 'var(--color-accent)', width: '100%' }),
-        option: (styles, { data, isFocused, isSelected }) => {
-            const color = data.color || 'var(--color-accent)';
-            return {
-                ...styles,
-                backgroundColor: isFocused ? color : 'var(--color-surface)',
-                color: isFocused ? 'var(--color-background)' : color,
-                cursor: 'pointer',
-            };
-        },
-        multiValue: (styles, { data }) => {
-            return {
-                ...styles,
-                backgroundColor: 'var(--color-surface)',
-            }
-        },
-        multiValueLabel: (styles, { data }) => {
-            return {
-                ...styles,
-                color: data.color || 'var(--color-light)',
-            }
-        }
-    };
 
 export type SetOption = {
     value: string;
     label: string;
     set: CardSet;
 };
+
+export const colorStyles: StylesConfig<SetOption, boolean> = {
+        control: (styles) => ({ ...styles, backgroundColor: 'var(--color-accent)', width: '100%' }),
+        option: (styles, { isFocused, isSelected }) => {
+            return {
+                ...styles,
+                backgroundColor: isFocused ? 'var(--color-accent)' : 'var(--color-surface)',
+                color: (isFocused || isSelected) ? 'var(--color-background)' : 'var(--color-light)',
+                cursor: 'pointer',
+            };
+        },
+        multiValue: (styles) => {
+            return {
+                ...styles,
+                backgroundColor: 'var(--color-surface)',
+            }
+        },
+        multiValueLabel: (styles) => {
+            return {
+                ...styles,
+                color: 'var(--color-light)',
+            }
+        }
+    };
 
 export default function SetSelect({
     onSelectChange,
@@ -56,28 +56,32 @@ export default function SetSelect({
         dispatch(loadSets());
     }, [dispatch]);
 
-    const sets: CardSet[] = useAppSelector(state => selectSetsByType(setType)(state));
+    const sets: CardSet[] = useAppSelector((state) =>
+        setType !== '' ? selectSetsByType(setType)(state) : selectAllSets(state)
+    );
 
     const isLoading: boolean = useAppSelector(selectIsLoading);
-    const noneOption: SetOption = {
-        value: '',
-        label: `Select a ${setType} set...`,
-        set: null as unknown as CardSet, // This is a bit hacky, but it allows us to have a "None" option in the select
+    const noneSet: CardSet = {
+        code: '',
+        name: `Select a ${setType} set...`,
+        set_type: setType as CardSetType,
     }
 
-    const options: SetOption[] = [...sets, noneOption].map((cardSet) => ({
+    const options: SetOption[] = [noneSet, ...sets].map((cardSet) => ({
         value: cardSet.code,
         label: cardSet.name,
         set: cardSet,
     }));
 
     const [userSelectedOption, setUserSelectedOption] = useState<SetOption | null>(null);
-    const selectedOption: SetOption = userSelectedOption || options.find(option => option.value === defaultSetCode) || noneOption;
+    const selectedOption: SetOption = userSelectedOption || options.find(option => option.value === defaultSetCode) || options.find(option => option.value === '') as SetOption;
 
-    const handleChange = (selected: SetOption | null) => {
-        if (selected) {
-            setUserSelectedOption(selected);
-            onSelectChange(selected.set);
+        const handleChange = (selected: SetOption | readonly SetOption[] | null) => {
+            const option = Array.isArray(selected) ? selected[0] : selected;
+
+            if (option) {
+                setUserSelectedOption(option);
+                onSelectChange(option.set);
         }
     };
 
