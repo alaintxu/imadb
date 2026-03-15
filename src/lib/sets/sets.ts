@@ -1,5 +1,5 @@
 import {db} from '../db';
-import type { CardSet, CardSetType } from './set_types';
+import type { CardSet, CardSetType } from '@/store/entities/sets';
 
 export async function getAllSets() {
   const sets = (await db`SELECT * FROM sets`) as CardSet[];

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSetByCode } from '@/lib/sets/sets';
-import { CardSet } from '@/lib/sets/set_types';
+import { CardSet } from '@/store/entities/sets';
 
 type Params = { code: string };
 
