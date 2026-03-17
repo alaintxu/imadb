@@ -12,7 +12,7 @@ export default function ImaForm() {
 
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="p-4 flex flex-col gap-4 bg-folder typewritter">
         <div className="flex gap-4 justify-between">
             <label className="w-full">
                 Villano
@@ -29,11 +29,11 @@ export default function ImaForm() {
         </div>
         <label>
             Descripción
-            <textarea className="w-full h-48 p-4 border rounded" placeholder="Descripción" />
+            <textarea className="w-full h-48 p-4 border rounded handwritten shadow bg-clip" placeholder="Descripción" />
         </label>
         <div>
-            <button className="border rounded flex gap-1 items-center py-1 px-4">
-                <MdAdd/>
+            <button className="border rounded flex gap-1 items-center pt-2 pb-1 px-4 bg-clip shadow">
+                <MdAdd className="mb-1"/>
                 Guardar IMA
             </button>
         </div>
@@ -42,7 +42,7 @@ export default function ImaForm() {
             {selectedVillain && (
                 <div>
                     <h3>Selected Villain:</h3>
-                    <div className="border rounded py-1 px-4">
+                    <div className="border rounded pt-1 px-4 bg-clip">
                         {selectedVillain.name} ({selectedVillain.code})
                     </div>
                 </div>
@@ -52,7 +52,7 @@ export default function ImaForm() {
                     <h3>Selected Modules:</h3>
                     <ul className="flex flex-col flex-wrap gap-4">
                         {selectedModules.map((module) => (
-                            <li className="border rounded py-1 px-4 text-center" key={module.code}>{module.name} ({module.code})</li>
+                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name} ({module.code})</li>
                         ))}
                     </ul>
                 </div>
@@ -62,7 +62,7 @@ export default function ImaForm() {
                     <h3>Selected Nemesis:</h3>
                     <ul className="flex flex-col flex-wrap gap-4">
                         {selectedNemesis.map((module) => (
-                            <li className="border rounded py-1 px-4 text-center" key={module.code}>{module.name} ({module.code})</li>
+                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name} ({module.code})</li>
                         ))}
                     </ul>
                 </div>

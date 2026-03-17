@@ -17,7 +17,7 @@ export default function Table({headers, data, rowsPerPage, filter }: {headers: s
                 <thead>
                     <tr>
                         {headers.map((header, index) => (
-                            <th key={index} className="bg-yellow-500 text-gray-200 p-4">
+                            <th key={index} className="bg-clip text-gray-200 p-4">
                                 {header}
                                 {filter.includes(index) && <select id={`filter-${index}`} value={filterValue[index]} onChange={(e) => setFilterValue(prev => { const newFilterValue = [...prev]; newFilterValue[index] = e.target.value; return newFilterValue; })} className="ml-2 p-1 border border-gray-300 rounded">
                                     <option value="">---</option>
@@ -31,7 +31,7 @@ export default function Table({headers, data, rowsPerPage, filter }: {headers: s
                 </thead>
                 <tbody>
                     {paginatedData.map((row, index) => (
-                        <tr key={index} className="bg-white text-black hover:bg-slate-50">
+                        <tr key={index} className="bg-folder text-black hover:bg-clip">
                             {row.map((cell, cellIndex) => (
                                 <td className="p-4 border-b border-gray-200" key={cellIndex}>{cell}</td>
                             ))}

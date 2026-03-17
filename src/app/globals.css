@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Special+Elite&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
   /*
 Usage,Color Name,OKLCH Value,Character/Vibe
 Primary,Biohazard Yellow,oklch(88% 0.19 95),The classic A.I.M. jumpsuit color.
@@ -12,30 +12,99 @@ Surface,Lab Slate,oklch(35% 0.04 260),Industrial surfaces and containers.
 Light,Sterile White,oklch(97% 0.01 95),Laboratory backgrounds and high-tech text.
 Alert,Rad-Level Red,oklch(60% 0.22 25),Scientific emergency/containment alerts.
   */
-  --color-primary: oklch(88% 0.19 95); /* Biohazard Yellow */
-  --color-accent: oklch(75% 0.18 70); /* Hive Orange */
-  --color-dark: oklch(18% 0.02 260); /* Deep Shadow */
-  --color-surface: oklch(35% 0.04 260); /* Lab Slate */
-  --color-light: oklch(97% 0.01 95); /* Sterile White */
-  --color-alert: oklch(60% 0.22 25); /* Rad-Level Red */
+  --primary: oklch(88% 0.19 95); /* Biohazard Yellow */
+  --secondary: oklch(75% 0.18 70); /* Hive Orange */
+  --dark: oklch(18% 0.02 260); /* Deep Shadow */
+  --surface: oklch(35% 0.04 260); /* Lab Slate */
+  --light: oklch(97% 0.01 95); /* Sterile White */
+  --alert: oklch(60% 0.22 25); /* Rad-Level Red */
+  --modok: oklch(0.2974 0.1469 311.04); /* Modok Purple */
+  /*--folder: oklch(0.9778 0.0582 102.16);*/ /* Pastel Lemon Chiffon */
+  --folder: oklch(0.75 0.058 70);
+  --clip: oklch(0.7493 0.1125 70);
+  --typewritter-font-family: "Special Elite", system-ui;
+  --handwritten-font-family: "Caveat", cursive;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-dark: var(--dark);
+  --color-surface: var(--surface);
+  --color-light: var(--light);
+  --color-alert: var(--alert);
+  --color-modok: var(--modok);
+  --color-folder: var(--folder);
+  --color-clip: var(--clip);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: url(/47074.jpg);
+  background-size: 256px 256px;
+  background-repeat: repeat;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.auto-grid {
+  --auto-grid-mode: auto-fill;
+  --auto-grid-min-size: 40ch;
+  --auto-grid-gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(
+    var(--auto-grid-mode),
+    minmax(
+      min(var(--auto-grid-min-size), 100%),
+      1fr
+    )
+  );
+  gap: var(--auto-grid-gap);
 }
+
+.auto-grid-fit {
+  --auto-grid-mode: auto-fit;
+}
+
+.handwritten {
+  font-family: var(--handwritten-font-family);
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.typewritter {
+  font-family: var(--typewritter-font-family);
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.sticker {
+    background-color: whitesmoke;
+    padding: .25rem;
+    border-radius: .25rem;
+    box-shadow: var(--box-shadow);
+    width: min(100%, max-content);
+}
+
+
+:nth-child(1) { --nth-child-counter: 0;}
+:nth-child(2) { --nth-child-counter: 1;}
+:nth-child(3) { --nth-child-counter: 2;}
+:nth-child(4) { --nth-child-counter: 3;}
+:nth-child(5) { --nth-child-counter: 4;}
+:nth-child(6) { --nth-child-counter: 5;}
+:nth-child(7) { --nth-child-counter: 6;}
+:nth-child(8) { --nth-child-counter: 7;}
+:nth-child(9) { --nth-child-counter: 8;}
+:nth-child(10) { --nth-child-counter: 9;}
+:nth-child(11) { --nth-child-counter: 10;}
+:nth-child(12) { --nth-child-counter: 11;}
+:nth-child(13) { --nth-child-counter: 12;}
+:nth-child(14) { --nth-child-counter: 13;}
+:nth-child(15) { --nth-child-counter: 14;}
+:nth-child(16) { --nth-child-counter: 15;}
+:nth-child(17) { --nth-child-counter: 16;}
+:nth-child(18) { --nth-child-counter: 17;}
+:nth-child(19) { --nth-child-counter: 18;}
+:nth-child(20) { --nth-child-counter: 19;}

@@ -14,25 +14,38 @@ export type SetOption = {
 };
 
 export const colorStyles: StylesConfig<SetOption, boolean> = {
-        control: (styles) => ({ ...styles, backgroundColor: 'var(--color-accent)', width: '100%' }),
+        control: (styles) => ({
+            ...styles, 
+            backgroundColor: 'var(--clip)',
+            width: '100%',
+            fontFamily: 'var(--typewritter-font-family)',
+        }),
         option: (styles, { isFocused, isSelected }) => {
             return {
                 ...styles,
-                backgroundColor: isFocused ? 'var(--color-accent)' : 'var(--color-surface)',
-                color: (isFocused || isSelected) ? 'var(--color-background)' : 'var(--color-light)',
+                backgroundColor: isFocused ? 'var(--folder)' : 'var(--clip)',
+                color: (isFocused || isSelected) ? 'var(--dark)' : 'var(--light)',
                 cursor: 'pointer',
+                fontFamily: 'var(--typewritter-font-family)'
             };
+        },
+        singleValue: (styles) => {
+            return {
+                ...styles,
+                fontFamily: 'var(--typewritter-font-family)',
+            }
         },
         multiValue: (styles) => {
             return {
                 ...styles,
-                backgroundColor: 'var(--color-surface)',
+                backgroundColor: 'var(--folder)',
             }
         },
         multiValueLabel: (styles) => {
             return {
                 ...styles,
-                color: 'var(--color-light)',
+                color: 'var(--dark)',
+                fontFamily: 'var(--typewritter-font-family)'
             }
         }
     };

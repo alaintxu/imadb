@@ -1,0 +1,150 @@
+.imaCard {
+    --box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    /*&:before {
+        content: "";
+        height: .75rem;
+        width: 33%;
+        border-radius: .5rem .5rem 0 0;
+        margin: 0;
+        left: 0;
+        padding: .5rem 1rem;
+        background-color: var(--folder);
+        box-shadow: var(--box-shadow);
+    }*/
+}
+
+.imaCardTitle {
+    padding: .5rem 1rem;
+    border-radius: .5rem .5rem 0 0;
+    background-color: var(--folder);
+    width: 75%;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    & * {
+        text-align: center;
+
+        &::before {
+            font-family: "Special Elite", system-ui;
+
+            content: "IMA: ";
+            margin-right: auto;
+        }
+    }
+}
+
+.imaCardContent {
+    position: relative;
+    background-color: var(--folder);
+    padding: .5rem;
+    border-radius: 0 .5rem .5rem .5rem;
+    display: grid;
+    grid-template-areas: "description photos" "description ." "modulars modulars" "tags tags";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    box-shadow: var(--box-shadow);
+}
+
+.imaCardDescription {
+    grid-area: description;
+    padding-left: .5rem;
+    font-size: 1rem;
+}
+
+
+/* Villain figure */
+
+.imaCardFigure, .imaCardModularFigure, .imaCardVillainFigure {
+    position: relative;
+    padding: .25rem;
+    background-color: whitesmoke;
+    box-shadow: var(--box-shadow);
+
+    & > img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        padding: .25rem;
+        padding-bottom: 0;
+    }
+
+    & > figcaption {
+        font-weight: bold;
+        margin-top: 2px;
+        color: var(--modok);
+        padding: 2px 4px;
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+.imaCardVillainFigure {
+    grid-area: photos;
+    transform: rotate(5deg);
+    margin-inline-end: 1rem;
+
+    &:before {
+        position: absolute;
+        content: attr(data-title);
+        color: white;
+        top: 1.2rem;
+        padding: .25rem .5rem 0 .5rem;
+        right: -1rem;
+        width: 100px;
+        background-color: var(--clip);
+        box-shadow: var(--box-shadow);
+        transform: rotate(85deg);
+        border-radius: 0 100vmax 100vmax 0;
+        font-family: "Special Elite", system-ui;
+    }
+}
+
+.imaCardModulars {
+    position: relative;
+    padding-inline: .5rem 4rem;
+    grid-area: modulars;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: start;
+    justify-content: end;
+    &:after {
+        content: attr(data-title);
+
+        color: whitesmoke;
+        position: absolute;
+        right: -1rem;
+        top: 2rem;
+        background-color: var(--clip);
+        padding-inline: 1rem .5rem;
+        border-radius: 100vmax 0 0 100vmax;
+        z-index: 101;
+        box-shadow: var(--box-shadow);
+        font-family: "Special Elite", system-ui;
+        transform: rotate(-10deg);
+    }
+}
+
+.imaCardModularFigure {
+    width: min(100%, 15ch);
+    transform: rotate(5deg);
+    margin-right: -3.5rem;
+
+    z-index: calc(100 - var(--nth-child-counter));
+    margin-top: calc(var(--nth-child-counter) * 1.5rem);
+}
+
+.imaCardTags {
+    grid-area: tags;
+    display: flex;
+    justify-content: end;
+    & * {
+        padding: .25rem .5rem;
+        width: max-content;
+        font-size: .5rem;
+    }
+}
