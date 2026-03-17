@@ -5,7 +5,7 @@ import { loadSets, selectAllSets } from '@/store/entities/sets';
 import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
 import type { MultiValue } from 'react-select';
 import Select from 'react-select';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { SetOption } from './SetSelect';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 
@@ -26,7 +26,11 @@ export default function SetSelectMulti({
         dispatch(loadSets());
     }, [dispatch]);
 
-    const sets: CardSet[] = useAppSelector(state => setType !== "" ? selectSetsByType(setType)(state) : selectAllSets(state));
+    const setSelector = useMemo(
+        () => (setType !== "" ? selectSetsByType(setType) : selectAllSets),
+        [setType]
+    );
+    const sets: CardSet[] = useAppSelector(setSelector);
 
     const isLoading: boolean = useAppSelector(selectIsLoading);
     const options: SetOption[] = sets.map((cardSet) => ({

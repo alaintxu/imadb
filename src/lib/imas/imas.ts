@@ -68,7 +68,7 @@ export async function getIMAsByVillainCode(villain_code: string) {
           ORDER BY rs.sort_order
         ),
         ARRAY[]::TEXT[]
-      ) AS related_set_codes,
+      ) AS modular_set_codes,
       COALESCE(
         ARRAY(
           SELECT ta.tag_code
@@ -77,7 +77,7 @@ export async function getIMAsByVillainCode(villain_code: string) {
           ORDER BY ta.tag_code
         ),
         ARRAY[]::TEXT[]
-      ) AS related_tag_codes
+      ) AS tags
     FROM imas i
     WHERE i.villain_code = ${villain_code}
   `) as IMA[];

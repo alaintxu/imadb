@@ -13,7 +13,7 @@ export default function Table({headers, data, rowsPerPage, filter }: {headers: s
         <div className="table-component">
             <Pagination page={page} maxPage={maxPage} onPageChange={setPage} />
 
-            <table className="table-auto border-collapse p-4 m-4 shadow-lg text-left m-auto">
+            <table className="table-auto border-collapse p-4 m-4 shadow-lg text-left m-auto typewritter">
                 <thead>
                     <tr>
                         {headers.map((header, index) => (

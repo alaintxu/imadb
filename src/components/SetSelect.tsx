@@ -2,7 +2,7 @@
 import type { CardSet, CardSetType } from '@/store/entities/sets';
 import { loadSets, selectAllSets } from '@/store/entities/sets';
 import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
@@ -69,9 +69,11 @@ export default function SetSelect({
         dispatch(loadSets());
     }, [dispatch]);
 
-    const sets: CardSet[] = useAppSelector((state) =>
-        setType !== '' ? selectSetsByType(setType)(state) : selectAllSets(state)
+    const setSelector = useMemo(
+        () => (setType !== '' ? selectSetsByType(setType) : selectAllSets),
+        [setType]
     );
+    const sets: CardSet[] = useAppSelector(setSelector);
 
     const isLoading: boolean = useAppSelector(selectIsLoading);
     const noneSet: CardSet = {

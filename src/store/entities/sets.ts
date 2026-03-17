@@ -13,7 +13,7 @@ export type CardSet = {
 }
 
 const SETS_URL = '/api/sets/';
-const SETS_CACHE_TIME_IN_MINUTES = 10;
+const SETS_CACHE_TIME_IN_MINUTES = 60;
 
 
 
@@ -74,7 +74,7 @@ export const loadSets = (): AppThunk => (dispatch, getState) => {
 
     /*
     ** Get list of sets from the database (using api)
-    ** if the last fetch was more than 10 minutes ago
+    ** if the last fetch was more than 60 minutes ago
     */
     const { lastFetch } = getState().entities.sets;
 

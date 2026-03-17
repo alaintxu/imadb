@@ -23,7 +23,7 @@ export default async function IMACard({ ima }: { ima: IMA }) {
                     </>}
                 </div>
             {villain && (<>
-                <figure className={styles.imaCardVillainFigure} data-title="Villano">
+                <figure className={styles.imaCardVillainFigure} data-title="Escenario">
                     <Image
                         src={`https://picsum.photos/seed/${villain.code}/300/300`}
                         alt={villain.name}
@@ -36,9 +36,9 @@ export default async function IMACard({ ima }: { ima: IMA }) {
                 </>
             )}   
                 <div className={styles.imaCardModulars} data-title={`Encuentros modulares`}>
-                    {modularSets.map((modular) => <>
+                    {modularSets.map((modular) => 
                     
-                        <figure className={styles.imaCardModularFigure} title={modular.name}>
+                        <figure className={styles.imaCardModularFigure} title={modular.name} key={modular.code}>
                             <Image
                                 src={`https://picsum.photos/seed/${modular.code}/300/300`}
                                 alt={modular.name}
@@ -48,12 +48,12 @@ export default async function IMACard({ ima }: { ima: IMA }) {
                             />
                             <figcaption className="handwritten">{modular.name}</figcaption>
                         </figure>
-                    </>)}
+                    )}
                 </div>
                 <ul className={`${styles.imaCardTags}`}>
-                    {ima.tags.map((tag) => <>
-                        <li className="sticker p-4">{tag}</li>
-                    </>)}
+                    {ima.tags.map((tag) => 
+                        <li className="sticker p-4" key={tag}>{tag}</li>
+                    )}
                 </ul>         
             </div>
         </div>

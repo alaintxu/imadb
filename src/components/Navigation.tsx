@@ -3,7 +3,8 @@ import Link from "next/link";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/imas", label: "Lista de IMAs" },
-  { href: "/api/sets", label: "Sets API" },
+  { href: "/scenarios", label: "Escenarios"},
+  /*{ href: "/api/sets", label: "Sets API" },*/
 ];
 
 export default function Navigation() {
