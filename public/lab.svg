@@ -1,0 +1,21 @@
+<svg width="200" height="250" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="flask-shape">
+      <path d="M65,40 L65,100 L30,200 Q25,220 50,220 L150,220 Q175,220 170,200 L135,100 L135,40 Z" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#flask-shape)">
+    <path class="liquid-back" d="M0,150 Q25,140 50,150 T100,150 T150,150 T200,150 T250,150 T300,150 T350,150 T400,150 V250 H0 Z" 
+          fill="#005b96" opacity="0.6" />
+    
+    <path class="liquid" d="M0,160 Q25,170 50,160 T100,160 T150,160 T200,160 T250,160 T300,160 T350,160 T400,160 V250 H0 Z" 
+          fill="#00aae4" opacity="0.8" />
+  </g>
+
+  <path d="M75,50 L75,90" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+
+  <path d="M65,40 L65,100 L30,200 Q25,220 50,220 L150,220 Q175,220 170,200 L135,100 L135,40 Z" 
+        fill="rgba(173, 216, 230, 0.3)" stroke="black" stroke-width="8" />
+  
+</svg>

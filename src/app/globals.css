@@ -42,8 +42,8 @@ Alert,Rad-Level Red,oklch(60% 0.22 25),Scientific emergency/containment alerts.
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-image: url(/47074.jpg);
-  background-size: 256px 256px;
+  background-image: url(/wood_256.webp);
+  /*background-size: 256px 256px;*/
   background-repeat: repeat;
 }
 

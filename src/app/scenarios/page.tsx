@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import { CardSet } from "@/store/entities/sets";
 
 
-export default async function IMAListPage() {
+export default async function ScenarioListPage() {
     const scenarios: CardSet[] = await getSetsByType("villain");
 
     return (

@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { getNavLoading } from "@/store/entities/ui";
+import { useAppSelector } from "@/hooks/useStore";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -8,13 +13,15 @@ const navItems = [
 ];
 
 export default function Navigation() {
+  const navLoading = useAppSelector(getNavLoading)
   return (
     <header className="border-b border-slate-200 bg-clip typewritter">
-      <nav className="w-full flex items-center justify-between px-4 pt-3 pb-2">
-        <Link className="text-lg font-bold tracking-wide" href="/">
+      <nav className="w-full flex items-center justify-between px-4">
+        <Link className="text-2xl font-bold tracking-wide flex items-center mt-2" href="/">
+          <Image src={navLoading ? '/lab_animated.svg' : '/lab.svg'} alt="Lab logo" width={32} height={32} className="mb-2 mr-2" />
           IMAdb
         </Link>
-        <ul className="flex items-center gap-2 text-sm font-medium">
+        <ul className="flex items-center gap-2 text-sm font-medium mt-4 mb-3">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link
