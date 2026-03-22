@@ -1,6 +1,5 @@
-import { getIMAByID } from "@/lib/imas/imas";
+import { getIMAByID, IMA } from "@/lib/imas/imas";
 import { getSetByCode } from "@/lib/sets/sets";
-import type { IMA } from "@/store/entities/imas";
 import { notFound } from "next/navigation";
 
 type Params = { id: string };
@@ -31,7 +30,7 @@ export default async function IMADetailPage({
         <span className="font-semibold">Slug:</span> {ima.slug}
       </p>
       <p className="mb-2">
-        <span className="font-semibold">Villain:</span> {villain?.name ?? "Unknown"} ({ima.villain_code})
+        <span className="font-semibold">Villain:</span> {villain?.name.es ?? "Unknown"} ({ima.villain_code})
       </p>
       <p className="mb-2">
         <span className="font-semibold">Author:</span> {ima.author_username}

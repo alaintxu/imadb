@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSetsByType } from '@/lib/sets/sets';
-import type { CardSetType } from '@/store/entities/sets';
+import { CardSetType, getSetsByType } from '@/lib/sets/sets';
 
 const VALID_TYPES = ['level', 'villain', 'modular', 'nemesis', 'unknown', 'other'] as const;
 

@@ -13,10 +13,19 @@ function getRotationClass(code: string): string {
     return rotations[hash % rotations.length];
 }
 
+function getScenarioDisplayName(scenario: CardSet): string {
+    return scenario.name?.es ?? scenario.name?.en ?? scenario.code;
+}
+
 export default function ScenarioList({ scenarios }: { scenarios: CardSet[] }) {
-    const sortedScenarios = scenarios.sort((a, b) => a.name.es.localeCompare(b.name.es));
+    const sortedScenarios = [...scenarios].sort((a, b) =>
+        getScenarioDisplayName(a).localeCompare(getScenarioDisplayName(b), "es", { sensitivity: "base" })
+    );
     const [filterText, setFilterText] = useState("");
-    const filteredScenarios = sortedScenarios.filter(scenario => scenario.name.es.toLowerCase().includes(filterText.toLowerCase()));
+    const lowerFilter = filterText.toLowerCase();
+    const filteredScenarios = sortedScenarios.filter((scenario) =>
+        getScenarioDisplayName(scenario).toLowerCase().includes(lowerFilter)
+    );
     return (
         <div>
             <div className="flex justify-end mb-4">
@@ -32,13 +41,14 @@ export default function ScenarioList({ scenarios }: { scenarios: CardSet[] }) {
             <div className={`auto-grid ${styles.scenarioGrid}`}>
                 {filteredScenarios.map((scenario) => {
                     const randRotate = getRotationClass(scenario.code);
+                    const scenarioName = getScenarioDisplayName(scenario);
                     return (
                     <Link   key={scenario.code}
                             href={`/imas?scenario=${scenario.code}`}
-                            title={scenario.name.es}
+                            title={scenarioName}
                             className={randRotate}>
                         <CardPhoto 
-                            name={scenario.name.es} 
+                            name={scenarioName} 
                             code={scenario.code}
                             className="shadow-lg hover:shadow-md"
                             />

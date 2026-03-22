@@ -2,9 +2,14 @@ import {db} from '@/lib/db';
 
 export type IMA = {
     id: string;
+    slug: string;
     title: string;
     villain_code: string;
+    source_url: string;
+    author_username: string;
+    original: boolean;
     description: string;
+    special_rules: string;
     modular_set_codes: string[]; // Array of related set codes
     tags: string[]; // Array of tag codes
 }
