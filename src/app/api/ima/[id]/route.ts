@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getIMAByID } from '@/lib/imas/imas';
-import { IMA } from '@/store/entities/imas';
+import type { IMA } from '@/lib/imas/imas';
 
 type Params = { id: string };
 

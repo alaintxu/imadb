@@ -78,13 +78,14 @@ body {
   font-style: normal;
 }
 
-
-.sticker {
-    background-color: whitesmoke;
-    padding: .25rem;
-    border-radius: .25rem;
-    box-shadow: var(--box-shadow);
-    width: min(100%, max-content);
+@layer components {
+  .sticker {
+      background-color: whitesmoke;
+      padding: .25em;
+      border-radius: .25rem;
+      box-shadow: var(--box-shadow);
+      width: min(100%, max-content);
+  }
 }
 
 

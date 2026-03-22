@@ -1781,6 +1781,27 @@ FROM jsonb_to_recordset($$
 $$::jsonb) AS js(code text, name text, set_type text)
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, set_type = EXCLUDED.set_type;
 
+
+
+ALTER TABLE sets ADD COLUMN names jsonb NOT NULL DEFAULT '{}'::jsonb;
+-- optional: backfill English from existing name
+UPDATE sets SET names = jsonb_set(names, '{en}', to_jsonb(name), true)
+WHERE NOT (names ? 'en');
+
+-- Foreign key for packs
+
+ALTER TABLE sets
+  ADD COLUMN IF NOT EXISTS pack_code TEXT;
+
+ALTER TABLE sets
+  ADD CONSTRAINT sets_pack_code_fkey
+  FOREIGN KEY (pack_code)
+  REFERENCES packs(code)
+  ON UPDATE CASCADE
+  ON DELETE SET NULL;
+  
+CREATE INDEX IF NOT EXISTS idx_sets_pack_code ON sets(pack_code);
+
 COMMIT;
 
 -- End of self-contained import

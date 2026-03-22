@@ -4,7 +4,7 @@ export type Pack = {
     code: string;
     cgdb_id: number;
     date_release: string;
-    name: string;
+    name: Record<string, string>; // language code to name mapping
     octgn_id: string;
     pack_type_code: string;
     position: number;

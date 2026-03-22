@@ -1,12 +1,12 @@
-import { getAllSets } from '../lib/sets/sets';
-import type { CardSet } from '../store/entities/sets';
-import Table from "../components/Table";
+import { getAllSets } from '@/lib/sets/sets';
+import type { CardSet } from '@/lib/sets/sets';
+import Table from "@/components/Table";
 import IMAForm from "./ima_form";
 
 export default async function Home() {
   const sets: CardSet[] = await getAllSets();
   const table_headers = ['Set', 'Código', 'Tipo'];
-  const table_data = sets.map(set => [set.name, set.code, set.set_type]);
+  const table_data = sets.map(set => [set.name.es, set.code, set.set_type]);
 
   return (
     <>

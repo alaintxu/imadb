@@ -2,7 +2,6 @@
     position: relative;
     padding: .25rem;
     background-color: whitesmoke;
-    box-shadow: var(--box-shadow);
 
     & > img {
         width: 100%;

@@ -1,13 +1,12 @@
 "use client";
-import type { CardSet, CardSetType } from '@/store/entities/sets';
 import { colorStyles } from './SetSelect';
-import { loadSets, selectAllSets } from '@/store/entities/sets';
-import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
 import type { MultiValue } from 'react-select';
 import Select from 'react-select';
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
+import { useSetsQuery } from '@/lib/query/queries';
 import type { SetOption } from './SetSelect';
-import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import type { CardSet, CardSetType } from '@/lib/sets/sets';
+
 
 
 export default function SetSelectMulti({
@@ -21,23 +20,14 @@ export default function SetSelectMulti({
     setType?: CardSetType|"",
     className?: string
 }) {
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        dispatch(loadSets());
-    }, [dispatch]);
+    const { data: sets = [], isLoading} = useSetsQuery(setType);
 
-    const setSelector = useMemo(
-        () => (setType !== "" ? selectSetsByType(setType) : selectAllSets),
-        [setType]
-    );
-    const sets: CardSet[] = useAppSelector(setSelector);
-
-    const isLoading: boolean = useAppSelector(selectIsLoading);
     const options: SetOption[] = sets.map((cardSet) => ({
         value: cardSet.code,
-        label: cardSet.name,
+        label: cardSet.name.es,
         set: cardSet,
     }));
+
 
     const [userSelectedOptions, setUserSelectedOptions] = useState<SetOption[]|null>(null);
 

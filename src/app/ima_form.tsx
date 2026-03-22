@@ -1,7 +1,7 @@
 "use client"
 import SetSelectMulti from '@/components/SetSelectMulti';
 import SetSelect from '@/components/SetSelect';
-import type { CardSet } from '../store/entities/sets';
+import type { CardSet } from '@/lib/sets/sets';
 import { useState } from "react";
 import { MdAdd } from "react-icons/md";
 
@@ -43,7 +43,7 @@ export default function ImaForm() {
                 <div>
                     <h3>Selected Villain:</h3>
                     <div className="border rounded pt-1 px-4 bg-clip">
-                        {selectedVillain.name} ({selectedVillain.code})
+                        {selectedVillain.name.es} ({selectedVillain.code})
                     </div>
                 </div>
             )}
@@ -52,7 +52,7 @@ export default function ImaForm() {
                     <h3>Selected Modules:</h3>
                     <ul className="flex flex-col flex-wrap gap-4">
                         {selectedModules.map((module) => (
-                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name} ({module.code})</li>
+                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name.es} ({module.code})</li>
                         ))}
                     </ul>
                 </div>
@@ -62,7 +62,7 @@ export default function ImaForm() {
                     <h3>Selected Nemesis:</h3>
                     <ul className="flex flex-col flex-wrap gap-4">
                         {selectedNemesis.map((module) => (
-                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name} ({module.code})</li>
+                            <li className="border rounded pt-1 px-4 text-center bg-clip" key={module.code}>{module.name.es} ({module.code})</li>
                         ))}
                     </ul>
                 </div>

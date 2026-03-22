@@ -1,11 +1,9 @@
 "use client";
-import type { CardSet, CardSetType } from '@/store/entities/sets';
-import { loadSets, selectAllSets } from '@/store/entities/sets';
-import { selectSetsByType, selectIsLoading } from '@/store/entities/sets';
-import { useState, useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import { useState, useEffect } from 'react';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
+import type { CardSet, CardSetType } from '@/lib/sets/sets'
+import { useSetsQuery } from '@/lib/query/queries';
 
 export type SetOption = {
     value: string;
@@ -63,28 +61,17 @@ export default function SetSelect({
     className?: string
 }) {
 
-    const dispatch = useAppDispatch();
+    const { data: sets = [], isLoading} = useSetsQuery(setType);
 
-    useEffect(() => {
-        dispatch(loadSets());
-    }, [dispatch]);
-
-    const setSelector = useMemo(
-        () => (setType !== '' ? selectSetsByType(setType) : selectAllSets),
-        [setType]
-    );
-    const sets: CardSet[] = useAppSelector(setSelector);
-
-    const isLoading: boolean = useAppSelector(selectIsLoading);
     const noneSet: CardSet = {
         code: '',
-        name: `Select a ${setType} set...`,
+        name:{"es": `Select a ${setType} set...`},
         set_type: setType as CardSetType,
     }
 
     const options: SetOption[] = [noneSet, ...sets].map((cardSet) => ({
         value: cardSet.code,
-        label: cardSet.name,
+        label: cardSet.name.es,
         set: cardSet,
     }));
 

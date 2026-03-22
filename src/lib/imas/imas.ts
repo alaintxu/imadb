@@ -1,8 +1,16 @@
-import {db} from '../db';
-import type { IMA } from '@/store/entities/imas';
+import {db} from '@/lib/db';
+
+export type IMA = {
+    id: string;
+    title: string;
+    villain_code: string;
+    description: string;
+    modular_set_codes: string[]; // Array of related set codes
+    tags: string[]; // Array of tag codes
+}
 
 export async function getAllIMAs() {
-  const imas = (await db`
+  const imas: IMA[] = (await db`
     SELECT
       i.*,
       COALESCE(
@@ -29,7 +37,7 @@ export async function getAllIMAs() {
 }
 
 export async function getIMAByID(id: string) {
-  const ima = (await db`
+  const ima: IMA[] = (await db`
     SELECT
       i.*,
       COALESCE(
@@ -57,7 +65,7 @@ export async function getIMAByID(id: string) {
 }
 
 export async function getIMAsByVillainCode(villain_code: string) {
-  const imas = (await db`
+  const imas: IMA[] = (await db`
     SELECT
       i.*,
       COALESCE(
