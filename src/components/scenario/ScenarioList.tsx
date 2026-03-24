@@ -3,8 +3,10 @@ import { CardSet } from "@/lib/sets/sets";
 import CardPhoto from "@/components/CardPhoto/CardPhoto";
 import styles from "./ScenarioList.module.css";
 import Link from "next/link";
-import { useState } from "react";
+import { use, useState } from "react";
 import { MdClear } from "react-icons/md";
+import { useSetsQuery } from "@/lib/query/queries";
+import { sortSetsByName } from "@/lib/sets/sets_front";
 
 function getRotationClass(code: string): string {
     const rotations = ["-rotate-4", "-rotate-3", "-rotate-2", "-rotate-1", "rotate-1", "rotate-2", "rotate-3", "rotate-4"];
@@ -17,13 +19,13 @@ function getScenarioDisplayName(scenario: CardSet): string {
     return scenario.name?.es ?? scenario.name?.en ?? scenario.code;
 }
 
-export default function ScenarioList({ scenarios }: { scenarios: CardSet[] }) {
-    const sortedScenarios = [...scenarios].sort((a, b) =>
-        getScenarioDisplayName(a).localeCompare(getScenarioDisplayName(b), "es", { sensitivity: "base" })
-    );
+export default function ScenarioList() {
+    const villainsQuery = useSetsQuery({type: "villain"});
+    const villains = use(villainsQuery.promise);
     const [filterText, setFilterText] = useState("");
     const lowerFilter = filterText.toLowerCase();
-    const filteredScenarios = sortedScenarios.filter((scenario) =>
+    const sortedVillains = sortSetsByName(villains);
+    const filteredScenarios = sortedVillains.filter((scenario) =>
         getScenarioDisplayName(scenario).toLowerCase().includes(lowerFilter)
     );
     return (

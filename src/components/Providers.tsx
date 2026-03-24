@@ -20,6 +20,7 @@ export default function Providers({ children }: ProvidersProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            experimental_prefetchInRender: true,
             staleTime: 1000 * 60 * 10,
             refetchOnWindowFocus: false,
           },

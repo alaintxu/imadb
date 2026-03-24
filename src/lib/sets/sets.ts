@@ -10,7 +10,6 @@ export type CardSet = {
   size?: number;
 }
 
-
 export async function getAllSets() {
   const sets = (await db`SELECT * FROM sets`) as CardSet[];
   return sets;

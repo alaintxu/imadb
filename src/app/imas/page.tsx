@@ -1,39 +1,35 @@
-import { getAllIMAs, getIMAsByVillainCode } from "@/lib/imas/imas";
-import IMACard from "@/components/ima/IMACard";
-import type { IMA } from "@/lib/imas/imas";
 import { Heading1 } from "@/components/Headings";
-import Postit from "@/components/Postit";
 import { ImLab } from "react-icons/im";
+import LinkButton from "@/components/LinkButton";
+import { Suspense } from "react";
+import IMAList from "@/components/ima/IMAList";
+import type { IMAQueryParams } from "@/lib/query/queries";
+import ErrorBoundary from "@/components/Error/ErrorBoundary";
+import Loading from "@/components/Loading";
 
-
-function getRotationClass(code: string): string {
-    const rotations = ["-rotate-2", "-rotate-1", "rotate-1", "rotate-2"];
-    const hash = code.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-
-    return rotations[hash % rotations.length];
-}
-
-
-export default async function IMAListPage({searchParams}: {searchParams: Promise<{scenario?: string}>}) {
-    const {scenario} = await searchParams;
-    const imas: IMA[] = scenario ? await getIMAsByVillainCode(scenario) : await getAllIMAs();
+export default async function IMAListPage({searchParams}: {searchParams: Promise<IMAQueryParams>}) {
+    const imaQueryParams = await searchParams;
 
     return (
-
         <section className="">
             <Heading1>
                 <ImLab/>
-                IMAs {scenario && <span>({scenario})</span>}
+                IMAs {imaQueryParams.villainCode && <span>({imaQueryParams.villainCode})</span>}
             </Heading1>
-            {imas.length === 0 && <>
-                <div className="flex justify-center mt-16">
-                    <Postit>No hay IMAs para este escenario</Postit>
-                </div>
-            </>}
-
-            <div id="ima-folder-list" className="auto-grid">
-                {imas.map(async ima => <div key={ima.id} className={getRotationClass(ima.id)}><IMACard ima={ima} /></div>)}
+            <div className="flex justify-end mb-4">
+                <LinkButton href="/imas/new" className="btn" iconConcept="add" >
+                    Create new IMA
+                </LinkButton>
             </div>
+            <ErrorBoundary>
+                <Suspense fallback={
+                    <Loading>
+                        Cargando IMAs...
+                    </Loading>
+                }>
+                    <IMAList {...imaQueryParams} />
+                </Suspense>
+            </ErrorBoundary>
         </section>
     );
 }

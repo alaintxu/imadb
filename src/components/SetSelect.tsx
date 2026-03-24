@@ -1,8 +1,9 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
 import type { CardSet, CardSetType } from '@/lib/sets/sets'
+import { sortSetsByName } from '@/lib/sets/sets_front';
 import { useSetsQuery } from '@/lib/query/queries';
 
 export type SetOption = {
@@ -61,7 +62,8 @@ export default function SetSelect({
     className?: string
 }) {
 
-    const { data: sets = [], isLoading} = useSetsQuery(setType);
+    const setsQuery = useSetsQuery(setType);
+    const sets = use(setsQuery.promise);
 
     const noneSet: CardSet = {
         code: '',
@@ -69,7 +71,7 @@ export default function SetSelect({
         set_type: setType as CardSetType,
     }
 
-    const options: SetOption[] = [noneSet, ...sets].map((cardSet) => ({
+    const options: SetOption[] = [noneSet, ...sortSetsByName(sets)].map((cardSet) => ({
         value: cardSet.code,
         label: cardSet.name.es,
         set: cardSet,
@@ -96,18 +98,14 @@ export default function SetSelect({
 
     return (
         <div className={`${className} villain-select`}>
-            {isLoading ? (
-                <span>Loading...</span>
-            ) : (
             <Select
                 options={options}
                 onChange={handleChange}
-                placeholder={isLoading ? "loading" : `Select ${setType} set...`}
+                placeholder={`Select ${setType} set...`}
                 noOptionsMessage={() => "No sets found"}
                 value={selectedOption}
                 styles={colorStyles}
             />
-            )}
         </div>
     );
 }

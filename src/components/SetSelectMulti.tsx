@@ -2,10 +2,11 @@
 import { colorStyles } from './SetSelect';
 import type { MultiValue } from 'react-select';
 import Select from 'react-select';
-import { useEffect, useState } from 'react';
-import { useSetsQuery } from '@/lib/query/queries';
+import { use, useEffect, useState } from 'react';
+import { useSetsQuery, type SetsQueryParams } from '@/lib/query/queries';
 import type { SetOption } from './SetSelect';
 import type { CardSet, CardSetType } from '@/lib/sets/sets';
+import { sortSetsByName } from '@/lib/sets/sets_front';
 
 
 
@@ -17,12 +18,14 @@ export default function SetSelectMulti({
  }: {
     onSelectChange: (sets: CardSet[]) => void,
     defaultSetCodes?: string[],
-    setType?: CardSetType|"",
+    setType?: CardSetType | '',
     className?: string
 }) {
-    const { data: sets = [], isLoading} = useSetsQuery(setType);
+    const setsQueryParams: SetsQueryParams = setType ? {type: setType} : {};
+    const setsQuery = useSetsQuery(setsQueryParams);
+    const sets = use(setsQuery.promise);
 
-    const options: SetOption[] = sets.map((cardSet) => ({
+    const options: SetOption[] = sortSetsByName(sets).map((cardSet) => ({
         value: cardSet.code,
         label: cardSet.name.es,
         set: cardSet,
@@ -48,17 +51,15 @@ export default function SetSelectMulti({
 
     return (
         <div className={`${className} villain-select`}>
-            {isLoading ? (<div>Loading...</div>) : (
             <Select
                 isMulti
                 options={options}
                 onChange={handleChange}
-                placeholder={isLoading ? "loading" : `Search ${setType} sets...`}
+                placeholder={`Search ${setType} sets...`}
                 noOptionsMessage={() => "No sets found"}
                 value={selectedOptions}
                 styles={colorStyles}
             />
-            )}
         </div>
     );
 }

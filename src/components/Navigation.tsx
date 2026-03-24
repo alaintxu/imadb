@@ -24,7 +24,7 @@ export default function Navigation() {
     <header className="border-b border-slate-200 bg-clip typewritter">
       <nav className="w-full flex items-center justify-between px-4">
         <Link className="text-2xl font-bold tracking-wide flex items-center mt-2" href="/">
-          <Image src={navLoading ? '/lab_animated.svg' : '/lab.svg'} alt="Lab logo" width={32} height={32} className="mb-2 mr-2" />
+          <Image src={navLoading ? '/lab_animated.svg' : '/lab.svg'} alt="Lab logo" width={32} height={32} loading="eager" className="mb-2 mr-2" />
           IMAdb
         </Link>
         <ul className="flex items-center gap-2 text-sm font-medium mt-4 mb-3">

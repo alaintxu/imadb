@@ -1,3 +1,5 @@
+import Postit from "../Postit";
+
 type Props = {
     error?: Error | null;
 }
@@ -5,13 +7,15 @@ type Props = {
 const MainErrorView = ({error}: Props) => {
   return (
     <section className="container mt-4">
-        <h1>Error</h1>
         {error && (
-            <div>
-                {error.message}
+            <div className="flex justify-center mt-16">
+                <Postit color="danger">
+                    Error:
+                    <br/>
+                    {error.message}
+                </Postit>
             </div>
         )}
-        <p>@ToDo: Añadir instrucciones para el usuario sobre qué hacer en caso de error, y cómo reportarlo.</p>
     </section>
   )
 }

@@ -1,21 +1,27 @@
-import { getSetsByType } from "@/lib/sets/sets";
-import { CardSet } from "@/lib/sets/sets";
 import ScenarioList from "@/components/scenario/ScenarioList";
 import { Heading1 } from "@/components/Headings";
 import { MdPhotoAlbum } from "react-icons/md";
-
+import { Suspense } from "react";
+import ErrorBoundary from "@/components/Error/ErrorBoundary";
+import Loading from "@/components/Loading";
 
 export default async function ScenarioListPage() {
-    const scenarios: CardSet[] = await getSetsByType("villain");
-
     return (
 
         <section>
             <Heading1 title="Elige un escenario">
-                <MdPhotoAlbum/>
+                <MdPhotoAlbum />
                 IMAs por escenario
             </Heading1>
-            <ScenarioList scenarios={scenarios} />
+            <ErrorBoundary>
+                <Suspense fallback={
+                    <Loading>
+                        Cargando escenarios...
+                    </Loading>
+                }>
+                    <ScenarioList />
+                </Suspense>
+            </ErrorBoundary>
         </section>
     );
 }
