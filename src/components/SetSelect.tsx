@@ -4,7 +4,7 @@ import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
 import type { CardSet, CardSetType } from '@/lib/sets/sets'
 import { sortSetsByName } from '@/lib/sets/sets_front';
-import { useSetsQuery } from '@/lib/query/queries';
+import { useSetsQuery, SetsQueryParams } from '@/lib/query/queries';
 
 export type SetOption = {
     value: string;
@@ -61,8 +61,8 @@ export default function SetSelect({
     setType?: CardSetType|"",
     className?: string
 }) {
-
-    const setsQuery = useSetsQuery(setType);
+    const setsQueryParams: SetsQueryParams = setType ? {type: setType} : {};
+    const setsQuery = useSetsQuery(setsQueryParams);
     const sets = use(setsQuery.promise);
 
     const noneSet: CardSet = {
