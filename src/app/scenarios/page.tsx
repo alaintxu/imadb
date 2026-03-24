@@ -5,6 +5,8 @@ import { Suspense } from "react";
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
 import Loading from "@/components/Loading";
 
+export const dynamic = "force-dynamic";
+
 export default async function ScenarioListPage() {
     return (
 
