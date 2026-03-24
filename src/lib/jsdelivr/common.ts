@@ -62,7 +62,7 @@ export async function fetchAndAddLanguageToItems<T extends TranslatableEntity>(
             ...item,
             name: {
                 ...item.name,
-                [lang]: item.name.en, // Fallback to English if translation fails
+                [lang]: item.name['en'], // Fallback to English if translation fails
             },
         }));
         console.error(`Failed to fetch translations for ${fileName} in ${lang}:`, error);

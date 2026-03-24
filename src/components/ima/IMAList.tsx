@@ -9,7 +9,7 @@ function getRotationClass(code: string): string {
     const rotations = ["-rotate-2", "-rotate-1", "rotate-1", "rotate-2"];
     const hash = code.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
-    return rotations[hash % rotations.length];
+    return rotations[hash % rotations.length]!;  // ! makes TypeScript happy, we know this will always be defined
 }
 
 export default function IMAList(params: IMAQueryParams) {

@@ -1,6 +1,7 @@
 "use client";
 import { use } from 'react';
 import { Pack } from '@/lib/packs/packs';
+import { packNameByLanguage } from '@/lib/packs/packs_front';
 
 export function PackList({packsPromise}: {packsPromise: Promise<Pack[]>}) {
     const packs = use(packsPromise);
@@ -10,7 +11,7 @@ export function PackList({packsPromise}: {packsPromise: Promise<Pack[]>}) {
         <div className="auto-grid">
             {filteredPacks.map(pack => (
                 <div key={pack.code} className="border rounded p-4 bg-folder typewritter">
-                    <h2 className="text-modok">{pack.name.es}</h2>
+                    <h2 className="text-modok">{packNameByLanguage(pack, "es")}</h2>
                     <p>Release Date: {pack.date_release}</p>
                     <p>Type: {pack.pack_type_code}</p>
                     <p>Size: {pack.size} cards</p>

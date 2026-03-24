@@ -5,17 +5,17 @@ import type { IMA } from '@/lib/imas/imas';
 type Params = { id: string };
 
 export async function GET(
-    request: NextRequest,
+    _request: NextRequest,
     { params }: { params: Promise<Params> }
 ) {
     const { id } = await params;
     const normalized = id.trim().toLowerCase();
 
-    const set: IMA | null = await getIMAByID(normalized);
+    const ima: IMA | undefined = await getIMAByID(normalized);
 
-    if (!set) {
+    if (!ima) {
         return NextResponse.json({ error: `IMA not found (${normalized})` }, { status: 404 });
     }
 
-    return NextResponse.json(set);
+    return NextResponse.json(ima);
 }

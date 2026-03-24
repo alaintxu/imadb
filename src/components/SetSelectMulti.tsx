@@ -6,7 +6,7 @@ import { use, useEffect, useState } from 'react';
 import { useSetsQuery, type SetsQueryParams } from '@/lib/query/queries';
 import type { SetOption } from './SetSelect';
 import type { CardSet, CardSetType } from '@/lib/sets/sets';
-import { sortSetsByName } from '@/lib/sets/sets_front';
+import { sortSetsByName, cardSetNameByLanguage } from '@/lib/sets/sets_front';
 
 
 
@@ -27,7 +27,7 @@ export default function SetSelectMulti({
 
     const options: SetOption[] = sortSetsByName(sets).map((cardSet) => ({
         value: cardSet.code,
-        label: cardSet.name.es,
+        label: cardSetNameByLanguage(cardSet, "es"),
         set: cardSet,
     }));
 

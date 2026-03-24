@@ -8,7 +8,7 @@ function isCardSetType(value: string): value is CardSetType {
 }
 
 export async function GET(
-    request: NextRequest,
+    _request: NextRequest,
     { params }: { params: Promise<{ type: string }> }
 ) {
     const { type } = await params;

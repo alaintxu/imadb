@@ -4,13 +4,13 @@ import { CardSet, getSetByCode } from '@/lib/sets/sets';
 type Params = { code: string };
 
 export async function GET(
-    request: NextRequest,
+    _request: NextRequest,
     { params }: { params: Promise<Params> }
 ) {
     const { code } = await params;
     const normalized = code.trim().toLowerCase();
 
-    const set: CardSet | null = await getSetByCode(normalized);
+    const set: CardSet | undefined = await getSetByCode(normalized);
 
     if (!set) {
         return NextResponse.json({ error: `Set not found (${normalized})` }, { status: 404 });

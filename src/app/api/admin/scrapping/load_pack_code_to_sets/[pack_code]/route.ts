@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import type { CardSet } from '@/lib/sets/sets';
 import { createOrUpdateSets, getAllSets } from '@/lib/sets/sets';
 import { fetchOriginalCardsSingleSet }  from '@/lib/jsdelivr/cards';
@@ -10,7 +10,7 @@ type SetSizeMap = {
 }
 
 export async function GET(
-    request: NextRequest,
+    _request: Request,
     { params }: { params: Promise<Params> }
 ) {
     const { pack_code } = await params;
@@ -21,7 +21,7 @@ export async function GET(
         const cards = await fetchOriginalCardsSingleSet(pack_code);
         for (const card of cards) {
             if (card.set_code in setLengthMap) {
-                setLengthMap[card.set_code] += 1;
+                setLengthMap[card.set_code]! += 1;
             } else {
                 setLengthMap[card.set_code] = 1;
             }
@@ -29,7 +29,7 @@ export async function GET(
         const filteredSets: CardSet[] = allSets.filter(set => set.code in setLengthMap);
         const setsToUpdate: CardSet[] = filteredSets.map(set => ({
             ...set,
-            size: setLengthMap[set.code],
+            size: setLengthMap[set.code] || 0,
             pack_code: pack_code
         }));
         const updatedSets = await createOrUpdateSets(setsToUpdate);

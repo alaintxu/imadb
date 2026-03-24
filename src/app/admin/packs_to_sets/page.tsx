@@ -1,6 +1,9 @@
 import { fetchAllPacks } from "@/lib/jsdelivr/packs";
 import { getAllSets } from "@/lib/sets/sets";
 
+import { packNameByLanguage } from "@/lib/packs/packs_front";
+import { cardSetNameByLanguage } from "@/lib/sets/sets_front";
+
 
 export default async function PacksToSetsPage() {
     const packs = await fetchAllPacks();
@@ -22,7 +25,7 @@ export default async function PacksToSetsPage() {
                         href={`/api/admin/scrapping/load_pack_code_to_sets/${pack.code}`}
                         className={`rounded ${color} text-white px-2 py-1`}
                         target="_blank">
-                        {pack.name.es} ({pack.code})
+                        {packNameByLanguage(pack, "es")} ({pack.code})
                     </a>
                     )
                 })}
@@ -31,7 +34,7 @@ export default async function PacksToSetsPage() {
             <ul className="flex flex-wrap gap-1 rounded">
                 {noPackSets.map(set => (
                     <li key={set.code} className="flex flex-col gap-1 bg-clip p-4">
-                        <span className="sticker">{set.name.es} ({set.code})</span>
+                        <span className="sticker">{cardSetNameByLanguage(set, "es")} ({set.code})</span>
                         <span>Pack: {set.pack_code}</span>
                         <span>Size: {set.size}</span>
                     </li>
@@ -41,7 +44,7 @@ export default async function PacksToSetsPage() {
             <ul className="auto-grid rounded">
                 {packSets.map(set => (
                     <li key={set.code} className="flex flex-col gap-1 bg-clip p-4">
-                        <span className="text-xl handwritten">{set.name.es} ({set.code})</span>
+                        <span className="text-xl handwritten">{cardSetNameByLanguage(set, "es")} ({set.code})</span>
                         <pre className="sticker"><code>
                             {JSON.stringify(set, null, 2)}
                         </code></pre>

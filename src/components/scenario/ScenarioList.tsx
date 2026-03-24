@@ -1,5 +1,4 @@
 "use client";
-import { CardSet } from "@/lib/sets/sets";
 import CardPhoto from "@/components/CardPhoto/CardPhoto";
 import styles from "./ScenarioList.module.css";
 import Link from "next/link";
@@ -7,16 +6,13 @@ import { use, useState } from "react";
 import { MdClear } from "react-icons/md";
 import { useSetsQuery } from "@/lib/query/queries";
 import { sortSetsByName } from "@/lib/sets/sets_front";
+import { cardSetNameByLanguage } from "@/lib/sets/sets_front";
 
 function getRotationClass(code: string): string {
     const rotations = ["-rotate-4", "-rotate-3", "-rotate-2", "-rotate-1", "rotate-1", "rotate-2", "rotate-3", "rotate-4"];
     const hash = code.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
-    return rotations[hash % rotations.length];
-}
-
-function getScenarioDisplayName(scenario: CardSet): string {
-    return scenario.name?.es ?? scenario.name?.en ?? scenario.code;
+    return rotations[hash % rotations.length]!;
 }
 
 export default function ScenarioList() {
@@ -26,7 +22,7 @@ export default function ScenarioList() {
     const lowerFilter = filterText.toLowerCase();
     const sortedVillains = sortSetsByName(villains);
     const filteredScenarios = sortedVillains.filter((scenario) =>
-        getScenarioDisplayName(scenario).toLowerCase().includes(lowerFilter)
+        cardSetNameByLanguage(scenario, "es").toLowerCase().includes(lowerFilter)
     );
     return (
         <div>
@@ -40,10 +36,10 @@ export default function ScenarioList() {
                     <MdClear />
                 </button>
             </div>
-            <div className={`auto-grid ${styles.scenarioGrid}`}>
+            <div className={`auto-grid ${styles['scenarioGrid']}`}>
                 {filteredScenarios.map((scenario) => {
                     const randRotate = getRotationClass(scenario.code);
-                    const scenarioName = getScenarioDisplayName(scenario);
+                    const scenarioName = cardSetNameByLanguage(scenario, "es");
                     return (
                     <Link   key={scenario.code}
                             href={`/imas?scenario=${scenario.code}`}

@@ -5,6 +5,7 @@ import Select from 'react-select';
 import type { CardSet, CardSetType } from '@/lib/sets/sets'
 import { sortSetsByName } from '@/lib/sets/sets_front';
 import { useSetsQuery, SetsQueryParams } from '@/lib/query/queries';
+import { cardSetNameByLanguage } from '@/lib/sets/sets_front';
 
 export type SetOption = {
     value: string;
@@ -73,7 +74,7 @@ export default function SetSelect({
 
     const options: SetOption[] = [noneSet, ...sortSetsByName(sets)].map((cardSet) => ({
         value: cardSet.code,
-        label: cardSet.name.es,
+        label: cardSetNameByLanguage(cardSet, "es"),
         set: cardSet,
     }));
 
