@@ -1,3 +1,4 @@
+"use client";
 import { JSX, ReactNode } from "react";
 
 export function Heading1({ children, className, title }: { children: ReactNode; className?: string, title?: string }) {

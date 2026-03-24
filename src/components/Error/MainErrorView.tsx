@@ -1,3 +1,4 @@
+"use client";
 import Postit from "../Postit";
 
 type Props = {

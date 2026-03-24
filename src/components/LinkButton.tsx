@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import IconForConcept from "@/components/IconForConcept";
 import type { Concept } from "@/components/IconForConcept";

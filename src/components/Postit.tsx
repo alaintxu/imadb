@@ -1,3 +1,4 @@
+"use client";
 import type { ReactNode } from "react";
 
 type PostitColor = "warning" | "danger" | "info" | "success";
