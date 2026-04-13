@@ -17,5 +17,7 @@ export async function GET(
         return NextResponse.json({ error: `IMA not found (${normalized})` }, { status: 404 });
     }
 
-    return NextResponse.json(ima);
+    return NextResponse.json(ima, {
+    headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=600' },
+  });
 }

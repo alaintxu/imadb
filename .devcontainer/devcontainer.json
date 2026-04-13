@@ -1,6 +1,9 @@
 {
     "name": "Node.js",
     "image": "registry.gitlab.com/mu-bd-ce/devcontainers/nodejs:latest",
+    "features": {
+        "ghcr.io/danzilberdan/devcontainers/opencode:0": {}
+    },
     "customizations": {
         "vscode": {
             "extensions": [

@@ -20,5 +20,7 @@ export async function GET(
 
     const sets = await getSetsByType(normalizedType);
 
-    return NextResponse.json(sets);
+    return NextResponse.json(sets, {
+    headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=600' },
+  });
 }

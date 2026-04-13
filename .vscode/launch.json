@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Next.js: dev server",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev",
+            "cwd": "${workspaceFolder}",
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**",
+                "!**/node_modules/**",
+                "!${workspaceFolder}/.next/**"
+            ]
+        },
+        {
+            "name": "Next.js: production (build + start)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run build && npm run start",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

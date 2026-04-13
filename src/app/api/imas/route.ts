@@ -33,5 +33,7 @@ export async function GET(request: NextRequest) {
 		original,
 	});
 
-	return NextResponse.json(filteredImas);
+  return NextResponse.json(filteredImas, {
+    headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=600' },
+  });
 }

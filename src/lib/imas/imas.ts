@@ -20,6 +20,7 @@ export type IMAFilters = {
   modularSetCodes?: string[];
   tags?: string[];
   original?: boolean;
+  limit?: number;
 };
 
 const IMA_SELECT_QUERY = `
@@ -49,6 +50,7 @@ const IMA_SELECT_QUERY = `
 export async function getIMAs(filters: IMAFilters = {}) {
   const whereClauses: string[] = [];
   const params: Array<string | boolean> = [];
+  const limitQuery = filters.limit ? `LIMIT ${filters.limit}` : ''; // Default limit to 100
 
   if (filters.villainCode) {
     params.push(filters.villainCode);
@@ -86,7 +88,7 @@ export async function getIMAs(filters: IMAFilters = {}) {
   });
 
   const whereQuery = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
-  const query = `${IMA_SELECT_QUERY} ${whereQuery}`;
+  const query = `${IMA_SELECT_QUERY} ${whereQuery} ${limitQuery}`;
 
   return (await db.query(query, params)) as IMA[];
 }
