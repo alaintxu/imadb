@@ -13,5 +13,5 @@
         }
     },
 	"runArgs": ["--sysctl", "net.ipv6.conf.all.disable_ipv6=1"],
-    "postCreateCommand": "npm install -g npm@latest && npm install"
+    "postCreateCommand": "npm install"
 }
