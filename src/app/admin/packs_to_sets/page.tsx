@@ -2,7 +2,7 @@ import { fetchAllPacks } from "@/lib/jsdelivr/packs";
 import { getAllSets } from "@/lib/sets/sets";
 
 import { packNameByLanguage } from "@/lib/packs/packs_front";
-import { cardSetNameByLanguage } from "@/lib/sets/sets_front";
+import { CardSetNameWithCode } from "@/components/CardSetName";
 
 
 export default async function PacksToSetsPage() {
@@ -34,7 +34,7 @@ export default async function PacksToSetsPage() {
             <ul className="flex flex-wrap gap-1 rounded">
                 {noPackSets.map(set => (
                     <li key={set.code} className="flex flex-col gap-1 bg-clip p-4">
-                        <span className="sticker">{cardSetNameByLanguage(set, "es")} ({set.code})</span>
+                        <span className="sticker"><CardSetNameWithCode set={set} /></span>
                         <span>Pack: {set.pack_code}</span>
                         <span>Size: {set.size}</span>
                     </li>
@@ -44,7 +44,7 @@ export default async function PacksToSetsPage() {
             <ul className="auto-grid rounded">
                 {packSets.map(set => (
                     <li key={set.code} className="flex flex-col gap-1 bg-clip p-4">
-                        <span className="text-xl handwritten">{cardSetNameByLanguage(set, "es")} ({set.code})</span>
+                        <span className="text-xl handwritten"><CardSetNameWithCode set={set} /></span>
                         <pre className="sticker"><code>
                             {JSON.stringify(set, null, 2)}
                         </code></pre>

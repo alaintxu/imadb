@@ -6,8 +6,10 @@ import SetSelect from "@/components/SetSelect";
 import SetSelectMulti from "@/components/SetSelectMulti";
 import IMACard from "./IMACard/IMACard";
 import { IMA } from "@/lib/imas/imas";
+import { useTranslation } from "@/i18n";
 
 export default function IMAForm() {
+    const { t } = useTranslation();
     const [selectedVillain, setSelectedVillain] = useState<CardSet | null>(null);
     const [selectedModules, setSelectedModules] = useState<CardSet[]>([]);
     const [selectedNemesis, setSelectedNemesis] = useState<CardSet[]>([]);
@@ -41,37 +43,37 @@ export default function IMAForm() {
         <div className="p-4 flex flex-col gap-4 typewritter">
             <div className="flex gap-4 justify-between">
                 <label className="w-full">
-                    Villano
+                    {t("imasNew.villain")}
                     <SetSelect onSelectChange={(set) => setSelectedVillain(set)} setType="villain" className="w-full" />
                 </label>
                 <label className="w-full">
-                    Módulos
-                    <Suspense fallback={<div>Loading modules...</div>}>
+                    {t("imasNew.modules")}
+                    <Suspense fallback={<div>{t("imasNew.loadingModules")}</div>}>
                         <SetSelectMulti onSelectChange={(sets) => setSelectedModules(sets)} setType="modular" className="w-full" />
                     </Suspense>
                 </label>
                 <label className="w-full">
-                    Archienemigos
-                    <Suspense fallback={<div>Loading modules...</div>}>
+                    {t("imasNew.nemesis")}
+                    <Suspense fallback={<div>{t("imasNew.loadingModules")}</div>}>
                         <SetSelectMulti onSelectChange={(sets) => setSelectedNemesis(sets)} setType="nemesis" className="w-full" />
                     </Suspense>
                 </label>
             </div>
             <label>
-                Título
+                {t("imasNew.titleLabel")}
                 <input 
                     type="text" 
                     className="w-full p-4 border rounded handwritten shadow bg-clip" 
-                    placeholder="Título del IMA" 
+                    placeholder={t("imasNew.titlePlaceholder")} 
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
             </label>
             <label>
-                Descripción
+                {t("imasNew.description")}
                 <textarea 
                     className="w-full h-48 p-4 border rounded handwritten shadow bg-clip" 
-                    placeholder="Descripción" 
+                    placeholder={t("imasNew.descriptionPlaceholder")} 
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -79,7 +81,7 @@ export default function IMAForm() {
             <div>
                 <button className="border rounded flex gap-1 items-center pt-2 pb-1 px-4 bg-clip shadow" onClick={sendIma} disabled={sending}>
                     <IconForConcept concept="add" />
-                    Guardar IMA
+                    {sending ? t("imasNew.sending") : t("imasNew.save")}
                 </button>
             </div>
 

@@ -2,13 +2,15 @@
 import { colorStyles } from './SetSelect';
 import type { MultiValue } from 'react-select';
 import Select from 'react-select';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useState, useMemo } from 'react';
 import { useSetsQuery, type SetsQueryParams } from '@/lib/query/queries';
 import type { SetOption } from './SetSelect';
 import type { CardSet, CardSetType } from '@/lib/sets/sets';
-import { sortSetsByName, cardSetNameByLanguage } from '@/lib/sets/sets_front';
+import { useTranslation, useSortSetsByName } from '@/i18n';
 
-
+function getCardSetName(set: CardSet, language: string): string {
+    return set.name[language] ?? set.name["en"] ?? set.code;
+}
 
 export default function SetSelectMulti({
     onSelectChange,
@@ -21,15 +23,20 @@ export default function SetSelectMulti({
     setType?: CardSetType | '',
     className?: string
 }) {
+    const { t, language } = useTranslation();
     const setsQueryParams: SetsQueryParams = setType ? {type: setType} : {};
     const setsQuery = useSetsQuery(setsQueryParams);
     const sets = use(setsQuery.promise);
+    const sortedSets = useSortSetsByName(sets);
 
-    const options: SetOption[] = sortSetsByName(sets).map((cardSet) => ({
-        value: cardSet.code,
-        label: cardSetNameByLanguage(cardSet, "es"),
-        set: cardSet,
-    }));
+    const options: SetOption[] = useMemo(() => 
+        sortedSets.map((cardSet) => ({
+            value: cardSet.code,
+            label: getCardSetName(cardSet, language),
+            set: cardSet,
+        })),
+        [sortedSets, language]
+    );
 
 
     const [userSelectedOptions, setUserSelectedOptions] = useState<SetOption[]|null>(null);
@@ -56,7 +63,7 @@ export default function SetSelectMulti({
                 options={options}
                 onChange={handleChange}
                 placeholder={`Search ${setType} sets...`}
-                noOptionsMessage={() => "No sets found"}
+                noOptionsMessage={() => t("setSelect.noSetsFound")}
                 value={selectedOptions}
                 styles={colorStyles}
             />

@@ -1,8 +1,7 @@
 import { getIMAByID, IMA } from "@/lib/imas/imas";
 import { getSetByCode } from "@/lib/sets/sets";
 import { notFound } from "next/navigation";
-
-import { cardSetNameByLanguage } from "@/lib/sets/sets_front";
+import { CardSetNameWithCode } from "@/components/CardSetName";
 
 type Params = { id: string };
 
@@ -32,7 +31,7 @@ export default async function IMADetailPage({
         <span className="font-semibold">Slug:</span> {ima.slug}
       </p>
       <p className="mb-2">
-        <span className="font-semibold">Villain:</span> {villain ? cardSetNameByLanguage(villain, "es") : "Unknown"} ({ima.villain_code})
+        <span className="font-semibold">Villain:</span> {villain ? <CardSetNameWithCode set={villain} /> : "Unknown"} ({ima.villain_code})
       </p>
       <p className="mb-2">
         <span className="font-semibold">Author:</span> {ima.author_username}

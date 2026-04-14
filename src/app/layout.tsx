@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import Navigation from "@/components/Navigation";
@@ -19,17 +20,23 @@ export const metadata: Metadata = {
   description: "Inspirado el los Laboratorios de IMA de La Mano de Thanos",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const languageCookie = cookieStore.get("language");
+  const initialLanguage = languageCookie?.value === "en" || languageCookie?.value === "es" 
+    ? languageCookie.value 
+    : "es";
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
+        <Providers initialLanguage={initialLanguage}>
           <Navigation />
           <main className="w-full px-4 py-6">{children}</main>
         </Providers>

@@ -1,11 +1,10 @@
 "use client";
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useMemo } from 'react';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
 import type { CardSet, CardSetType } from '@/lib/sets/sets'
-import { sortSetsByName } from '@/lib/sets/sets_front';
 import { useSetsQuery, SetsQueryParams } from '@/lib/query/queries';
-import { cardSetNameByLanguage } from '@/lib/sets/sets_front';
+import { useTranslation, useSortSetsByName } from '@/i18n';
 
 export type SetOption = {
     value: string;
@@ -50,6 +49,10 @@ export const colorStyles: StylesConfig<SetOption, boolean> = {
         }
     };
 
+function getCardSetName(set: CardSet, language: string): string {
+    return set.name[language] ?? set.name["en"] ?? set.code;
+}
+
 export default function SetSelect({
     onSelectChange,
     defaultSetCode,
@@ -62,21 +65,24 @@ export default function SetSelect({
     setType?: CardSetType|"",
     className?: string
 }) {
+    const { t, language } = useTranslation();
     const setsQueryParams: SetsQueryParams = setType ? {type: setType} : {};
     const setsQuery = useSetsQuery(setsQueryParams);
     const sets = use(setsQuery.promise);
+    const sortedSets = useSortSetsByName(sets);
 
-    const noneSet: CardSet = {
-        code: '',
-        name:{"es": `Select a ${setType} set...`},
-        set_type: setType as CardSetType,
-    }
-
-    const options: SetOption[] = [noneSet, ...sortSetsByName(sets)].map((cardSet) => ({
-        value: cardSet.code,
-        label: cardSetNameByLanguage(cardSet, "es"),
-        set: cardSet,
-    }));
+    const options: SetOption[] = useMemo(() => {
+        const noneSet: CardSet = {
+            code: '',
+            name:{"es": t("setSelect.selectSet")},
+            set_type: setType as CardSetType,
+        }
+        return [noneSet, ...sortedSets].map((cardSet) => ({
+            value: cardSet.code,
+            label: getCardSetName(cardSet, language),
+            set: cardSet,
+        }));
+    }, [t, setType, sortedSets, language]);
 
     const [userSelectedOption, setUserSelectedOption] = useState<SetOption | null>(null);
     const selectedOption: SetOption = userSelectedOption || options.find(option => option.value === defaultSetCode) || options.find(option => option.value === '') as SetOption;
@@ -91,7 +97,7 @@ export default function SetSelect({
     };
 
     useEffect(() => {
-        if(userSelectedOption !== null) return; // Don't override user selection with defaultSetCode changes
+        if(userSelectedOption !== null) return;
         if(defaultSetCode)
             onSelectChange(options.find(option => option.value === defaultSetCode)?.set || null as unknown as CardSet);
     }, [defaultSetCode, options, onSelectChange, userSelectedOption]);
@@ -102,8 +108,8 @@ export default function SetSelect({
             <Select
                 options={options}
                 onChange={handleChange}
-                placeholder={`Select ${setType} set...`}
-                noOptionsMessage={() => "No sets found"}
+                placeholder={t("setSelect.selectSet")}
+                noOptionsMessage={() => t("setSelect.noSetsFound")}
                 value={selectedOption}
                 styles={colorStyles}
             />
