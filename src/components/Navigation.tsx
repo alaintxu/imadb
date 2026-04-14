@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/useStore";
 import { MdAdminPanelSettings, MdPhotoAlbum } from "react-icons/md";
 import { ImLab } from "react-icons/im";
 import { useTranslation } from "@/i18n";
+import { SignedIn, SignedOut, UserButton } from "@neondatabase/auth/react/ui";
 
 const navItems = [
   { href: "/imas", labelKey: "nav.imas" as const, icon: ImLab },
@@ -44,6 +45,19 @@ export default function Navigation() {
               </li>
             ))}
           </ul>
+          <div className="mt-1 flex items-center gap-2">
+            <SignedOut>
+              <Link className={navItemClass} href="/auth/sign-in">
+                Entrar
+              </Link>
+              <Link className={navItemClass} href="/auth/sign-up">
+                Registro
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
           <div className="flex items-center border rounded overflow-hidden">
             {languages.map((lang) => (
               <button
