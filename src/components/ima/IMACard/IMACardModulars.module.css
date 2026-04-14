@@ -1,0 +1,65 @@
+
+.imaCardModulars {
+    --modulars-image-size: 7ch;
+    position: relative;
+    grid-area: modulars;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+    
+    &:has(:nth-child(4)) {
+        --modulars-image-size: 5ch;
+    }
+    &:has(:nth-child(6)) {
+        --modulars-image-size: 4ch;
+    }
+    &:has(:nth-child(9)) {
+        --modulars-image-size: 3ch;
+    }
+    &:has(:nth-child(12)) {
+        --modulars-image-size: 2ch;
+    }
+
+    &:after {
+        content: attr(data-title);
+
+        color: whitesmoke;
+        position: absolute;
+        left: -1rem;
+        top: 2rem;
+        background-color: var(--clip);
+        padding-inline: 1rem .5rem;
+        border-radius: 0 100vmax 100vmax 0;
+        z-index: 101;
+        box-shadow: var(--box-shadow);
+        font-family: "Special Elite", system-ui;
+        transform: rotate(10deg);
+    }
+}
+
+.imaCardModulars > * {
+    max-width: min-content;
+    margin: 0;
+    padding: .25rem;
+    background-color: whitesmoke;
+    box-shadow: var(--box-shadow);
+
+    &:not(:first-child) {
+        margin-left: calc(var(--modulars-image-size) / -2);
+    }
+
+}
+
+
+.imaCardModularFigure {
+    transform: rotate(-5deg);
+    z-index: calc(100 - var(--nth-child-counter));
+    /*margin-top: calc(var(--nth-child-counter) * 2rem);*/
+    /*margin-left: -2rem;
+    &:first-child {
+        margin-left: 0;
+    }*/
+}

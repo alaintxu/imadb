@@ -44,6 +44,7 @@ export function Heading({ children, tag, className, title }: { children: ReactNo
         "flex",
         "items-center",
         "gap-2",
+        "glass",
         className,
     ]
         .filter(Boolean)

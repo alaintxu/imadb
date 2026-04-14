@@ -1,5 +1,5 @@
 "use client";
-import CardPhoto from "@/components/CardPhoto/CardPhoto";
+import CardPhoto from "@/components/set/SetFigure";
 import styles from "./ScenarioList.module.css";
 import Link from "next/link";
 import { use, useState } from "react";

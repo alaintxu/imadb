@@ -109,3 +109,13 @@ body {
 :nth-child(18) { --nth-child-counter: 17;}
 :nth-child(19) { --nth-child-counter: 18;}
 :nth-child(20) { --nth-child-counter: 19;}
+
+
+.glass {
+  --blur: 5px;
+    /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(var(--blur));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

@@ -1,0 +1,36 @@
+.setFigure {
+    padding: .25rem;
+    background-color: whitesmoke;
+}
+
+.setFigure[data-title]:hover::before {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--modok);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+}
+
+.setImage {
+    width: var(--set-figure-width, 100%);
+    aspect-ratio: 1 / 1;
+    padding: .25rem;
+    padding-bottom: 0;  
+}
+
+
+.setCaption {
+    font-weight: bold;
+    margin-top: 2px;
+    color: var(--modok);
+    padding: 2px 4px;
+    font-size: 1rem;
+    text-align: center;
+}

@@ -1,11 +1,12 @@
 import { Heading1 } from "@/components/Headings";
 import { ImLab } from "react-icons/im";
 import LinkButton from "@/components/LinkButton";
-import { Suspense } from "react";
-import IMAList from "@/components/ima/IMAList";
+//import { Suspense } from "react";
+//import IMAList from "@/components/ima/IMAList";
 import type { IMAQueryParams } from "@/lib/query/queries";
-import ErrorBoundary from "@/components/Error/ErrorBoundary";
-import Loading from "@/components/Loading";
+//import ErrorBoundary from "@/components/Error/ErrorBoundary";
+//import Loading from "@/components/Loading";
+import IMAListServerComponent from "@/components/ima/IMAListServerComponent";
 
 export default async function IMAListPage({searchParams}: {searchParams: Promise<IMAQueryParams>}) {
     const imaQueryParams = await searchParams;
@@ -21,7 +22,7 @@ export default async function IMAListPage({searchParams}: {searchParams: Promise
                     Create new IMA
                 </LinkButton>
             </div>
-            <ErrorBoundary>
+            {/*<ErrorBoundary>
                 <Suspense fallback={
                     <Loading>
                         Cargando IMAs...
@@ -29,7 +30,8 @@ export default async function IMAListPage({searchParams}: {searchParams: Promise
                 }>
                     <IMAList {...imaQueryParams} />
                 </Suspense>
-            </ErrorBoundary>
+            </ErrorBoundary>*/}
+            <IMAListServerComponent {...imaQueryParams} />
         </section>
     );
 }

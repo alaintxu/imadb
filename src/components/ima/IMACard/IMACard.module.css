@@ -22,7 +22,7 @@
 .imaCardTitle {
     padding: .5rem 1rem;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
-    background-color: var(--folder);
+    /*background-color: var(--folder);*/
     width: 50ch;
     font-size: .6rem;
     display: flex;
@@ -48,7 +48,7 @@
 
 .imaCardContent {
     position: relative;
-    background-color: var(--folder);
+    /*background-color: var(--folder);*/
     padding: .5rem;
     border-radius: var(--border-radius);
     border-top-left-radius: 0;
@@ -76,10 +76,6 @@
 /* Villain figure */
 
 .imaCardFigure, .imaCardModularFigure, .imaCardVillainFigure {
-    position: relative;
-    padding: .25rem;
-    background-color: whitesmoke;
-    box-shadow: var(--box-shadow);
 
     & > img {
         width: 100%;
@@ -98,9 +94,13 @@
     }
 }
 .imaCardVillainFigure {
+    width: 300px;
+    max-width: 50%;
     grid-area: photos;
     transform: rotate(5deg);
     margin-inline-end: 1rem;
+    justify-self: end;
+    align-self: start;
 
     &:before {
         position: absolute;
@@ -115,43 +115,10 @@
         transform: rotate(85deg);
         border-radius: 0 100vmax 100vmax 0;
         font-family: "Special Elite", system-ui;
+        z-index: 100;
     }
 }
 
-.imaCardModulars {
-    margin-top: -3rem;
-    position: relative;
-    padding-inline: .5rem 4rem;
-    grid-area: modulars;
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    justify-content: start;
-    &:after {
-        content: attr(data-title);
-
-        color: whitesmoke;
-        position: absolute;
-        left: -1rem;
-        top: 2rem;
-        background-color: var(--clip);
-        padding-inline: 1rem .5rem;
-        border-radius: 0 100vmax 100vmax 0;
-        z-index: 101;
-        box-shadow: var(--box-shadow);
-        font-family: "Special Elite", system-ui;
-        transform: rotate(10deg);
-    }
-}
-
-.imaCardModularFigure {
-    width: min(100%, 15ch);
-    transform: rotate(-5deg);
-    margin-right: -3.5rem;
-
-    z-index: calc(100 - var(--nth-child-counter));
-    margin-top: calc(var(--nth-child-counter) * 1.5rem);
-}
 
 .imaCardTags {
     grid-area: tags;

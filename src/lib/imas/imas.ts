@@ -1,17 +1,18 @@
-import {db} from '@/lib/db';
+import { db, imaRelatedSetsTable, imaTagAssignmentsTable, imasTable } from '@/db';
+import { eq, and, asc } from 'drizzle-orm';
 
 export type IMA = {
     id: string;
     slug: string;
     title: string;
     villain_code: string;
-    source_url: string;
+    source_url: string | null;
     author_username: string;
     original: boolean;
     description: string;
-    special_rules: string;
-    modular_set_codes: string[]; // Array of related set codes
-    tags: string[]; // Array of tag codes
+    special_rules: string | null;
+    modular_set_codes: string[];
+    tags: string[];
 }
 
 export type IMAFilters = {
@@ -23,74 +24,110 @@ export type IMAFilters = {
   limit?: number;
 };
 
-const IMA_SELECT_QUERY = `
-  SELECT
-    i.*,
-    COALESCE(
-      ARRAY(
-        SELECT rs.set_code
-        FROM ima_related_sets rs
-        WHERE rs.ima_id = i.id
-        ORDER BY rs.sort_order
-      ),
-      ARRAY[]::TEXT[]
-    ) AS modular_set_codes,
-    COALESCE(
-      ARRAY(
-        SELECT ta.tag_code
-        FROM ima_tag_assignments ta
-        WHERE ta.ima_id = i.id
-        ORDER BY ta.tag_code
-      ),
-      ARRAY[]::TEXT[]
-    ) AS tags
-  FROM imas i
-`;
-
-export async function getIMAs(filters: IMAFilters = {}) {
-  const whereClauses: string[] = [];
-  const params: Array<string | boolean> = [];
-  const limitQuery = filters.limit ? `LIMIT ${filters.limit}` : ''; // Default limit to 100
+function buildWhereConditions(filters: IMAFilters) {
+  const conditions = [];
 
   if (filters.villainCode) {
-    params.push(filters.villainCode);
-    whereClauses.push(`i.villain_code = $${params.length}`);
+    conditions.push(eq(imasTable.villainCode, filters.villainCode));
   }
 
   if (filters.authorUsername) {
-    params.push(filters.authorUsername);
-    whereClauses.push(`i.author_username = $${params.length}`);
+    conditions.push(eq(imasTable.authorUsername, filters.authorUsername));
   }
 
   if (filters.original !== undefined) {
-    params.push(filters.original);
-    whereClauses.push(`i.original = $${params.length}`);
+    conditions.push(eq(imasTable.original, filters.original));
   }
 
-  filters.modularSetCodes?.forEach((code) => {
-    params.push(code);
-    whereClauses.push(`EXISTS (
-      SELECT 1
-      FROM ima_related_sets rs
-      WHERE rs.ima_id = i.id
-        AND rs.set_code = $${params.length}
-    )`);
-  });
+  return conditions.length > 0 ? and(...conditions) : undefined;
+}
 
-  filters.tags?.forEach((tag) => {
-    params.push(tag);
-    whereClauses.push(`EXISTS (
-      SELECT 1
-      FROM ima_tag_assignments ta
-      WHERE ta.ima_id = i.id
-        AND ta.tag_code = $${params.length}
-    )`);
-  });
+export async function getIMAs(filters: IMAFilters = {}) {
+  const whereConditions = buildWhereConditions(filters);
+  
+  const baseQuery = db.select().from(imasTable);
+  
+  if (whereConditions) {
+    baseQuery.where(whereConditions);
+  }
 
-  const whereQuery = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
-  const query = `${IMA_SELECT_QUERY} ${whereQuery} ${limitQuery}`;
+  if (filters.limit) {
+    baseQuery.limit(filters.limit);
+  }
 
-  return (await db.query(query, params)) as IMA[];
+  const imaRows = await baseQuery;
+
+  if (filters.modularSetCodes?.length || filters.tags?.length) {
+    const filteredIMAs: typeof imaRows = [];
+    
+    for (const ima of imaRows) {
+      let matches = true;
+      
+      for (const code of filters.modularSetCodes ?? []) {
+        const relatedSet = await db
+          .select()
+          .from(imaRelatedSetsTable)
+          .where(and(eq(imaRelatedSetsTable.imaId, ima.id), eq(imaRelatedSetsTable.setCode, code)))
+          .limit(1);
+        
+        if (relatedSet.length === 0) {
+          matches = false;
+          break;
+        }
+      }
+      
+      if (!matches) continue;
+      
+      for (const tag of filters.tags ?? []) {
+        const tagAssignment = await db
+          .select()
+          .from(imaTagAssignmentsTable)
+          .where(and(eq(imaTagAssignmentsTable.imaId, ima.id), eq(imaTagAssignmentsTable.tagCode, tag)))
+          .limit(1);
+        
+        if (tagAssignment.length === 0) {
+          matches = false;
+          break;
+        }
+      }
+      
+      if (matches) {
+        filteredIMAs.push(ima);
+      }
+    }
+    
+    return Promise.all(filteredIMAs.map(enrichIMA));
+  }
+
+  return Promise.all(imaRows.map(enrichIMA));
+}
+
+async function enrichIMA(ima: typeof imasTable.$inferSelect): Promise<IMA> {
+  const relatedSets = await db
+    .select({ setCode: imaRelatedSetsTable.setCode })
+    .from(imaRelatedSetsTable)
+    .where(eq(imaRelatedSetsTable.imaId, ima.id))
+    .orderBy(asc(imaRelatedSetsTable.sortOrder));
+
+  const tagAssignments = await db
+    .select({ tagCode: imaTagAssignmentsTable.tagCode })
+    .from(imaTagAssignmentsTable)
+    .where(eq(imaTagAssignmentsTable.imaId, ima.id))
+    .orderBy(asc(imaTagAssignmentsTable.tagCode));
+
+  return {
+    id: ima.id,
+    slug: ima.slug,
+    title: ima.title,
+    villain_code: ima.villainCode,
+    source_url: ima.sourceUrl,
+    author_username: ima.authorUsername,
+    original: ima.original,
+    description: ima.description,
+    special_rules: ima.specialRules,
+    modular_set_codes: relatedSets.map(r => r.setCode),
+    tags: tagAssignments.map(t => t.tagCode),
+  };
 }
 
 export async function getAllIMAs() {
@@ -98,33 +135,11 @@ export async function getAllIMAs() {
 }
 
 export async function getIMAByID(id: string) {
-  const ima: IMA[] = (await db`
-    SELECT
-      i.*,
-      COALESCE(
-        ARRAY(
-          SELECT rs.set_code
-          FROM ima_related_sets rs
-          WHERE rs.ima_id = i.id
-          ORDER BY rs.sort_order
-        ),
-        ARRAY[]::TEXT[]
-      ) AS modular_set_codes,
-      COALESCE(
-        ARRAY(
-          SELECT ta.tag_code
-          FROM ima_tag_assignments ta
-          WHERE ta.ima_id = i.id
-          ORDER BY ta.tag_code
-        ),
-        ARRAY[]::TEXT[]
-      ) AS tags
-    FROM imas i
-    WHERE i.id = ${id}
-  `) as IMA[];
-  return ima[0];
+  const result = await db.select().from(imasTable).where(eq(imasTable.id, id));
+  if (!result[0]) return undefined;
+  return enrichIMA(result[0]);
 }
 
-export async function getIMAsByVillainCode(villain_code: string) {
-  return getIMAs({ villainCode: villain_code });
+export async function getIMAsByVillainCode(villainCode: string) {
+  return getIMAs({ villainCode });
 }

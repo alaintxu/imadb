@@ -1,9 +1,7 @@
-"use client";
-
-import { use } from "react";
 import type { IMA } from "@/lib/imas/imas";
-import { useIMAsQuery, type IMAQueryParams } from "@/lib/query/queries";
+import { getIMAs } from "@/lib/imas/imas";
 import IMACard from "./IMACard/IMACard";
+import type { IMAQueryParams } from "@/lib/query/queries";
 
 function getRotationClass(code: string): string {
     const rotations = ["-rotate-2", "-rotate-1", "rotate-1", "rotate-2"];
@@ -12,10 +10,9 @@ function getRotationClass(code: string): string {
     return rotations[hash % rotations.length]!;  // ! makes TypeScript happy, we know this will always be defined
 }
 
-export default function IMAList(params: IMAQueryParams) {
+export default async function IMAListServerComponent(params: IMAQueryParams) {
 
-    const imasQuery = useIMAsQuery(params);
-    const imas: IMA[] = use(imasQuery.promise);
+    const imas: IMA[] = await getIMAs(params);
 
     return (
         <section id="ima-folder-list" className="auto-grid">

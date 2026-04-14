@@ -1,81 +1,75 @@
-import { db } from '../db';
+import { db, setsTable } from '@/db';
+import { eq, sql } from 'drizzle-orm';
 
 export type CardSetType = 'level' | 'villain' | 'modular' | 'nemesis' | 'unknown' | 'other' | 'core' | 'hero' | 'scenario' | 'story' | 'standard' | 'expert' | 'hero_special' | 'evidence' | 'leader' | 'main_scheme';
 
 export type CardSet = {
   code: string;
-  name: Record<string, string>; // language code to name mapping
+  name: Record<string, string>;
   set_type: CardSetType;
-  pack_code?: string;
-  size?: number;
+  pack_code?: string | null;
+  size?: number | null;
+}
+
+function toCardSetRow(row: typeof setsTable.$inferSelect): CardSet {
+  return {
+    code: row.code,
+    name: row.name,
+    set_type: row.setType as CardSetType,
+    pack_code: row.packCode,
+    size: row.size,
+  };
 }
 
 export async function getAllSets() {
-  const sets = (await db`SELECT * FROM sets`) as CardSet[];
-  return sets;
+  const result = await db.select().from(setsTable);
+  return result.map(toCardSetRow);
 }
 
 export async function getAllSetCodes() {
-  const setCodes = (await db`SELECT code FROM sets`) as { code: string }[];
-  return setCodes.map(s => s.code);
+  const result = await db.select({ code: setsTable.code }).from(setsTable);
+  return result.map(s => s.code);
 }
 
 export async function getSetByCode(code: string) {
-  const set = (await db`SELECT * FROM sets WHERE code = ${code}`) as CardSet[];
-  return set[0];
+  const result = await db.select().from(setsTable).where(eq(setsTable.code, code));
+  return result[0] ? toCardSetRow(result[0]) : undefined;
 }
 
 export async function getSetsByType(type: CardSetType) {
-  const sets = (await db`SELECT * FROM sets WHERE set_type = ${type}`) as CardSet[];
-  return sets;
+  const result = await db.select().from(setsTable).where(eq(setsTable.setType, type));
+  return result.map(toCardSetRow);
 }
 
 export async function getAllSetTypes() {
-  const types = (await db`SELECT DISTINCT set_type FROM sets`) as { set_type: CardSetType }[];
-  return types.map(t => t.set_type);
+  const result = await db.selectDistinct({ setType: setsTable.setType }).from(setsTable);
+  return result.map(t => t.setType as CardSetType);
 }
 
-export async function createOrUpdateSets(sets: CardSet[]) {
-  const payload = JSON.stringify(
-    sets.map((s) => ({
+export async function createOrUpdateSets(cardSets: CardSet[]) {
+  const rows = await db.insert(setsTable).values(
+    cardSets.map((s) => ({
       code: s.code,
       name: s.name,
-      set_type: s.set_type,
-      pack_code: s.pack_code ?? null,
+      setType: s.set_type,
+      packCode: s.pack_code ?? null,
       size: s.size ?? null,
     }))
-  );
+  ).onConflictDoUpdate({
+    target: setsTable.code,
+    set: {
+      name: sql`excluded.name`,
+      setType: sql`excluded.set_type`,
+      packCode: sql`excluded.pack_code`,
+      size: sql`excluded.size`,
+    },
+  }).returning();
 
-  const rows = (await db`
-    WITH input AS (
-      SELECT *
-      FROM jsonb_to_recordset(${payload}::jsonb)
-      AS x(
-        code text,
-        name jsonb,
-        set_type set_type_enum,
-        pack_code text,
-        size int
-      )
-    )
-    INSERT INTO sets (code, name, set_type, pack_code, size)
-    SELECT code, name, set_type, pack_code, size
-    FROM input
-    ON CONFLICT (code) DO UPDATE
-    SET
-      name = EXCLUDED.name,
-      set_type = EXCLUDED.set_type,
-      pack_code = EXCLUDED.pack_code,
-      size = EXCLUDED.size
-    RETURNING code, name, set_type, pack_code, size;
-  `) as CardSet[];
-
-  return rows;
+  return rows.map(toCardSetRow);
 }
 
-export async function createOrUpdateSet(set: CardSet) {
-  const rows = await createOrUpdateSets([set]);
+export async function createOrUpdateSet(cardSet: CardSet) {
+  const rows = await createOrUpdateSets([cardSet]);
   if (!rows[0]) throw new Error('Upsert failed for set');
   return rows[0];
 }
-
