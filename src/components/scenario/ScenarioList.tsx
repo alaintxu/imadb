@@ -1,5 +1,5 @@
 "use client";
-import CardPhoto from "@/components/set/SetFigure";
+import { SetFigure } from "@/components/set/SetFigure";
 import styles from "./ScenarioList.module.css";
 import Link from "next/link";
 import { use, useState } from "react";
@@ -41,12 +41,12 @@ export default function ScenarioList() {
                     const randRotate = getRotationClass(scenario.code);
                     const scenarioName = cardSetNameByLanguage(scenario, "es");
                     return (
-                    <Link   key={scenario.code}
+                    <Link key={scenario.code}
                             href={`/imas?scenario=${scenario.code}`}
                             title={scenarioName}
                             className={randRotate}>
-                        <CardPhoto 
-                            name={scenarioName} 
+                        <SetFigure
+                            name={cardSetNameByLanguage(scenario, "es")} 
                             code={scenario.code}
                             className="shadow-lg hover:shadow-md"
                             />
