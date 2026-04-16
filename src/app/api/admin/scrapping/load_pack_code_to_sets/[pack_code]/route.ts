@@ -11,6 +11,10 @@ type SetSizeMap = {
     [setCode: string]: number;
 }
 
+type SetFirstCardMap = {
+    [setCode: string]: string;
+}
+
 export async function GET(
     _request: Request,
     { params }: { params: Promise<Params> }
@@ -27,6 +31,7 @@ export async function GET(
 
     const allSets: CardSet[] = await getAllSets();
     const setLengthMap: SetSizeMap = {};
+    const setFirstCardMap: SetFirstCardMap = {};
     try{
         const cards = await fetchOriginalCardsSingleSet(pack_code);
         for (const card of cards) {
@@ -35,12 +40,18 @@ export async function GET(
             } else {
                 setLengthMap[card.set_code] = 1;
             }
+
+            const currentMin = setFirstCardMap[card.set_code];
+            if (currentMin === undefined || card.code < currentMin) {
+                setFirstCardMap[card.set_code] = card.code;
+            }
         }
         const filteredSets: CardSet[] = allSets.filter(set => set.code in setLengthMap);
         const setsToUpdate: CardSet[] = filteredSets.map(set => ({
             ...set,
             size: setLengthMap[set.code] || 0,
-            pack_code: pack_code
+            pack_code: pack_code,
+            first_card_code: setFirstCardMap[set.code] ?? null,
         }));
         const updatedSets = await createOrUpdateSets(setsToUpdate);
 

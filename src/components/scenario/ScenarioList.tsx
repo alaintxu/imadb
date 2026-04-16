@@ -51,8 +51,8 @@ export default function ScenarioList() {
                             title={scenarioName}
                             className={randRotate}>
                         <SetFigure
-                            name={scenarioName} 
-                            code={scenario.code}
+                            name={scenarioName}
+                            code={scenario.first_card_code || "back_orange"}
                             className="shadow-lg hover:shadow-md"
                             />
                     </Link>

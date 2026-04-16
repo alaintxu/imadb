@@ -8,11 +8,16 @@ import { MdAdminPanelSettings, MdPhotoAlbum } from "react-icons/md";
 import { ImLab } from "react-icons/im";
 import { useTranslation } from "@/i18n";
 import { SignedIn, SignedOut, UserButton } from "@neondatabase/auth/react/ui";
+import { authClient } from "@/lib/auth/client";
+import { isAdminUser } from "@/lib/auth/admin";
 
 const navItems = [
   { href: "/imas", labelKey: "nav.imas" as const, icon: ImLab },
   { href: "/scenarios", labelKey: "nav.scenarios" as const, icon: MdPhotoAlbum },
-  { href: "/admin", labelKey: "nav.admin" as const, icon: MdAdminPanelSettings },
+];
+
+const adminNavItems = [
+  { href: "/admin/packs_to_sets", labelKey: "nav.admin" as const, icon: MdAdminPanelSettings }
 ];
 
 const navItemClass = "border-color-primary font-bold rounded px-3 pt-1.5 pb-1 text-slate-700 transition hover:bg-secondary hover:text-white";
@@ -25,7 +30,9 @@ const languageLabels: Record<string, string> = {
 export default function Navigation() {
   const { t, language, setLanguage } = useTranslation();
   const navLoading = useAppSelector(getNavLoading);
+  const { data: session } = authClient.useSession();
   const languages: ("en" | "es")[] = ["en", "es"];
+  const isAdmin = isAdminUser(session?.user);
 
   return (
     <header className="border-b border-slate-200 bg-clip typewritter">
@@ -44,14 +51,24 @@ export default function Navigation() {
                 </Link>
               </li>
             ))}
+            {isAdmin ? (
+              adminNavItems.map((item) => (
+                <li key={item.href}>
+                  <Link className={navItemClass} href={item.href}>
+                    <item.icon size={16} className="inline mr-1 mb-1"/>
+                    {t(item.labelKey)}
+                  </Link>
+                </li>
+              ))
+            ) : null}
           </ul>
-          <div className="mt-1 flex items-center gap-2">
+          <div className="mt-1 flex items-center gap-2 text-sm font-medium mt-4 mb-3">
             <SignedOut>
               <Link className={navItemClass} href="/auth/sign-in">
-                Entrar
+                {t("nav.sign_in")}
               </Link>
               <Link className={navItemClass} href="/auth/sign-up">
-                Registro
+                {t("nav.sign_up")}
               </Link>
             </SignedOut>
             <SignedIn>
@@ -59,19 +76,29 @@ export default function Navigation() {
             </SignedIn>
           </div>
           <div className="flex items-center border rounded overflow-hidden">
-            {languages.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => setLanguage(lang)}
-                className={`px-2 py-1 text-xs font-bold transition ${
-                  language === lang
-                    ? "bg-modok text-white"
-                    : "bg-transparent text-slate-700 hover:bg-secondary hover:text-white"
-                }`}
-              >
-                {languageLabels[lang]}
-              </button>
-            ))}
+            {languages.map((lang) => {
+              const isCurrentLang = language === lang;
+              const className = `
+                px-2 
+                py-1 
+                text-xs 
+                font-bold 
+                transition 
+                ${isCurrentLang 
+                  ? "bg-modok text-black cursor-default" 
+                  : "bg-transparent text-slate-700 hover:bg-secondary hover:text-white"
+                }
+                `.trim();
+              return (
+                <button
+                  key={lang}
+                  onClick={() => setLanguage(lang)}
+                  className={className}
+                >
+                  {isCurrentLang && "* "}
+                  {languageLabels[lang]}
+                </button>
+              )})}
           </div>
         </div>
       </nav>

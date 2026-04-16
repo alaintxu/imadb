@@ -3,6 +3,7 @@ import { getAllSets } from "@/lib/sets/sets";
 
 import { packNameByLanguage } from "@/lib/packs/packs_front";
 import { CardSetNameWithCode } from "@/components/CardSetName";
+import CardImageWithSkeleton from "@/components/CardImageWithSkeleton";
 
 
 export default async function PacksToSetsPage() {
@@ -45,9 +46,14 @@ export default async function PacksToSetsPage() {
                 {packSets.map(set => (
                     <li key={set.code} className="flex flex-col gap-1 bg-clip p-4">
                         <span className="text-xl handwritten"><CardSetNameWithCode set={set} /></span>
-                        <pre className="sticker"><code>
+                        <pre className="sticker text-dark"><code>
                             {JSON.stringify(set, null, 2)}
                         </code></pre>
+                        {set.first_card_code && 
+                            <CardImageWithSkeleton src={`https://cdn.jsdelivr.net/gh/alaintxu/mc-ocr@main/images/accepted/${set.first_card_code}.webp`} 
+                                alt={set.name["es"] || set.name["en"] || set.code}
+                                className="rounded" />
+                        }
                     </li>
                 ))}
             </ul>

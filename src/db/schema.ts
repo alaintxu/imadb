@@ -57,6 +57,7 @@ export const setsTable = pgTable('sets', {
   name: jsonb('name').$type<Record<string, string>>().notNull(),
   setType: setTypeEnum('set_type').notNull(),
   packCode: text('pack_code').references(() => packsTable.code, { onDelete: 'set null' }),
+  firstCardCode: text('first_card_code'),
   size: integer('size'),
 }, (table) => [
   index('sets_pack_code_idx').on(table.packCode),

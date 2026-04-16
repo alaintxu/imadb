@@ -1,0 +1,521 @@
+{
+  "id": "593a498c-ae7d-4ab2-ac78-52b20635275d",
+  "prevId": "980503b0-b97b-4992-93a3-294c4e8e1a15",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.ima_related_sets": {
+      "name": "ima_related_sets",
+      "schema": "",
+      "columns": {
+        "ima_id": {
+          "name": "ima_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "set_code": {
+          "name": "set_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ima_related_sets_ima_id_imas_id_fk": {
+          "name": "ima_related_sets_ima_id_imas_id_fk",
+          "tableFrom": "ima_related_sets",
+          "tableTo": "imas",
+          "columnsFrom": [
+            "ima_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "ima_related_sets_set_code_sets_code_fk": {
+          "name": "ima_related_sets_set_code_sets_code_fk",
+          "tableFrom": "ima_related_sets",
+          "tableTo": "sets",
+          "columnsFrom": [
+            "set_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ima_related_sets_ima_id_set_code_pk": {
+          "name": "ima_related_sets_ima_id_set_code_pk",
+          "columns": [
+            "ima_id",
+            "set_code"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "ima_related_sets_sort_order_positive": {
+          "name": "ima_related_sets_sort_order_positive",
+          "value": "\"ima_related_sets\".\"sort_order\" > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.ima_tag_assignments": {
+      "name": "ima_tag_assignments",
+      "schema": "",
+      "columns": {
+        "ima_id": {
+          "name": "ima_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_code": {
+          "name": "tag_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ima_tag_assignments_ima_id_imas_id_fk": {
+          "name": "ima_tag_assignments_ima_id_imas_id_fk",
+          "tableFrom": "ima_tag_assignments",
+          "tableTo": "imas",
+          "columnsFrom": [
+            "ima_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "ima_tag_assignments_tag_code_ima_tags_code_fk": {
+          "name": "ima_tag_assignments_tag_code_ima_tags_code_fk",
+          "tableFrom": "ima_tag_assignments",
+          "tableTo": "ima_tags",
+          "columnsFrom": [
+            "tag_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ima_tag_assignments_ima_id_tag_code_pk": {
+          "name": "ima_tag_assignments_ima_id_tag_code_pk",
+          "columns": [
+            "ima_id",
+            "tag_code"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ima_tags": {
+      "name": "ima_tags",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.imas": {
+      "name": "imas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "villain_code": {
+          "name": "villain_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author_username": {
+          "name": "author_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original": {
+          "name": "original",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "special_rules": {
+          "name": "special_rules",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "imas_villain_code_idx": {
+          "name": "imas_villain_code_idx",
+          "columns": [
+            {
+              "expression": "villain_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "imas_author_username_idx": {
+          "name": "imas_author_username_idx",
+          "columns": [
+            {
+              "expression": "author_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "imas_original_idx": {
+          "name": "imas_original_idx",
+          "columns": [
+            {
+              "expression": "original",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "imas_villain_code_sets_code_fk": {
+          "name": "imas_villain_code_sets_code_fk",
+          "tableFrom": "imas",
+          "tableTo": "sets",
+          "columnsFrom": [
+            "villain_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "imas_slug_unique": {
+          "name": "imas_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.packs": {
+      "name": "packs",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "cgdb_id": {
+          "name": "cgdb_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_release": {
+          "name": "date_release",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "octgn_id": {
+          "name": "octgn_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pack_type_code": {
+          "name": "pack_type_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size": {
+          "name": "size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "packs_pack_type_code_idx": {
+          "name": "packs_pack_type_code_idx",
+          "columns": [
+            {
+              "expression": "pack_type_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "packs_position_idx": {
+          "name": "packs_position_idx",
+          "columns": [
+            {
+              "expression": "position",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sets": {
+      "name": "sets",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "set_type": {
+          "name": "set_type",
+          "type": "set_type_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pack_code": {
+          "name": "pack_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "first_card_code": {
+          "name": "first_card_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size": {
+          "name": "size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "sets_pack_code_idx": {
+          "name": "sets_pack_code_idx",
+          "columns": [
+            {
+              "expression": "pack_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sets_set_type_idx": {
+          "name": "sets_set_type_idx",
+          "columns": [
+            {
+              "expression": "set_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "sets_pack_code_packs_code_fk": {
+          "name": "sets_pack_code_packs_code_fk",
+          "tableFrom": "sets",
+          "tableTo": "packs",
+          "columnsFrom": [
+            "pack_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.set_type_enum": {
+      "name": "set_type_enum",
+      "schema": "public",
+      "values": [
+        "level",
+        "villain",
+        "modular",
+        "nemesis",
+        "unknown",
+        "other",
+        "core",
+        "hero",
+        "scenario",
+        "story",
+        "standard",
+        "expert",
+        "hero_special",
+        "evidence",
+        "leader",
+        "main_scheme"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -8,6 +8,7 @@ export type CardSet = {
   name: Record<string, string>;
   set_type: CardSetType;
   pack_code?: string | null;
+  first_card_code?: string | null;
   size?: number | null;
 }
 
@@ -17,6 +18,7 @@ function toCardSetRow(row: typeof setsTable.$inferSelect): CardSet {
     name: row.name,
     set_type: row.setType as CardSetType,
     pack_code: row.packCode,
+    first_card_code: row.firstCardCode,
     size: row.size,
   };
 }
@@ -53,6 +55,7 @@ export async function createOrUpdateSets(cardSets: CardSet[]) {
       name: s.name,
       setType: s.set_type,
       packCode: s.pack_code ?? null,
+      firstCardCode: s.first_card_code ?? null,
       size: s.size ?? null,
     }))
   ).onConflictDoUpdate({
@@ -61,6 +64,7 @@ export async function createOrUpdateSets(cardSets: CardSet[]) {
       name: sql`excluded.name`,
       setType: sql`excluded.set_type`,
       packCode: sql`excluded.pack_code`,
+      firstCardCode: sql`excluded.first_card_code`,
       size: sql`excluded.size`,
     },
   }).returning();

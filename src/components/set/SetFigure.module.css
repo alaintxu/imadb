@@ -16,10 +16,13 @@
     white-space: nowrap;
     font-size: 0.75rem;
     margin-bottom: 4px;
+    max-width: 100%;
 }
 
 .setImage {
+    box-sizing: border-box;
     width: var(--set-figure-width, 100%);
+    max-width: 100%;
     aspect-ratio: 1 / 1;
     padding: .25rem;
     padding-bottom: 0;  

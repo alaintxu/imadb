@@ -25,7 +25,13 @@ export default function IMACard({ ima }: { ima: IMA }) {
                 </div>
                 <ErrorBoundary>
                     <Suspense fallback={<SetFigureSkeleton className="color-modok typewritter" />}>
-                        <SetFigureUse code={ima.villain_code} className="color-modok typewritter" dataTitle={t('imasNew.villain')}/>
+                        <SetFigureUse
+                            code={ima.villain_code} 
+                            className="color-modok typewritter" 
+                            dataTitle={t('imasNew.villain')}
+                            width={200}
+                            height={200}
+                            />
                     </Suspense>
                 </ErrorBoundary>
                 <IMACardModulars set_codes={ima.modular_set_codes} className="typewritter" />

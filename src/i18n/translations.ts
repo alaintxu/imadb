@@ -4,6 +4,8 @@ export const translations = {
       imas: "IMA List",
       scenarios: "Scenarios",
       admin: "Admin",
+      sign_in: "Sign In",
+      sign_up: "Sign Up",
     },
     home: {
       title: "Card Sets",
@@ -70,6 +72,8 @@ export const translations = {
       imas: "Lista de IMAs",
       scenarios: "Escenarios",
       admin: "Admin",
+      sign_in: "Iniciar sesión",
+      sign_up: "Registrarse",
     },
     home: {
       title: "Sets de cartas",
