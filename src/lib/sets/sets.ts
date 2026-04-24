@@ -69,7 +69,7 @@ export async function getAllSets() {
 }
 
 export async function getAllSetCodes() {
-  const result = await db.select({ code: setsTable.code }).from(setsTable);
+  const result = await db.select({ code: setsTable.code }).from(setsTable).orderBy(setsTable.firstCardCode);
   return result.map(s => s.code);
 }
 
@@ -83,7 +83,7 @@ export async function getSetsByType(type: CardSetType) {
 }
 
 export async function getAllSetTypes() {
-  const result = await db.selectDistinct({ setType: setsTable.setType }).from(setsTable);
+  const result = await db.selectDistinct({ setType: setsTable.setType }).from(setsTable).orderBy(setsTable.setType);
   return result.map(t => t.setType as CardSetType);
 }
 

@@ -7,7 +7,6 @@ import { MdClear } from "react-icons/md";
 import { useSetsQuery } from "@/lib/query/queries";
 import { useTranslation } from "@/i18n";
 import type { CardSet } from "@/lib/sets/sets";
-import { useSortSetsByFirstCardCode } from "@/lib/sets/sets_front";
 
 function getRotationClass(code: string): string {
     const rotations = ["-rotate-4", "-rotate-3", "-rotate-2", "-rotate-1", "rotate-1", "rotate-2", "rotate-3", "rotate-4"];
