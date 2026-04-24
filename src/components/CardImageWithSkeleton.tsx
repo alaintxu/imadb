@@ -82,7 +82,7 @@ export default function CardImageWithSkeleton({
 
     return (
         <div
-            className="relative overflow-hidden rounded"
+            className="relative overflow-hidden rounded mx-auto"
             style={{ width, height, maxWidth: "100%" }}
             aria-busy={!isLoaded}
         >
