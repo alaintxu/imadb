@@ -11,3 +11,11 @@ export function sortSetsByName(sets: CardSet[], language: string = 'es'): CardSe
 export function cardSetNameByLanguage(set: CardSet, language: string = 'es'): string {
   return set.name[language] ?? set.name['en'] ?? set.code;
 }
+
+export function useSortSetsByFirstCardCode(sets: CardSet[]): CardSet[] {
+  return [...sets].sort((a, b) => {
+    const codeA = a.first_card_code ?? a.code;
+    const codeB = b.first_card_code ?? b.code;
+    return codeA.localeCompare(codeB);
+  });
+}

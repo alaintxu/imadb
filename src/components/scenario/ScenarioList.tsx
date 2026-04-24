@@ -5,8 +5,9 @@ import Link from "next/link";
 import { use, useState } from "react";
 import { MdClear } from "react-icons/md";
 import { useSetsQuery } from "@/lib/query/queries";
-import { useTranslation, useSortSetsByName } from "@/i18n";
+import { useTranslation } from "@/i18n";
 import type { CardSet } from "@/lib/sets/sets";
+import { useSortSetsByFirstCardCode } from "@/lib/sets/sets_front";
 
 function getRotationClass(code: string): string {
     const rotations = ["-rotate-4", "-rotate-3", "-rotate-2", "-rotate-1", "rotate-1", "rotate-2", "rotate-3", "rotate-4"];
@@ -23,10 +24,9 @@ export default function ScenarioList() {
     const { t, language } = useTranslation();
     const villainsQuery = useSetsQuery({type: "villain"});
     const villains = use(villainsQuery.promise);
-    const sortedVillains = useSortSetsByName(villains);
     const [filterText, setFilterText] = useState("");
     const lowerFilter = filterText.toLowerCase();
-    const filteredScenarios = sortedVillains.filter((scenario) =>
+    const filteredScenarios = villains.filter((scenario) =>
         getCardSetName(scenario, language).toLowerCase().includes(lowerFilter)
     );
     return (
@@ -47,8 +47,7 @@ export default function ScenarioList() {
                     const scenarioName = getCardSetName(scenario, language);
                     return (
                     <Link key={scenario.code}
-                            href={`/imas?scenario=${scenario.code}`}
-                            title={scenarioName}
+                            href={`/imas?villainCode=${scenario.code}`}
                             className={randRotate}>
                         <SetFigure
                             name={scenarioName}

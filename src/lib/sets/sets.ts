@@ -1,5 +1,5 @@
 import { db, setsTable } from '@/db';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 
 export type CardSetType = 'level' | 'villain' | 'modular' | 'nemesis' | 'unknown' | 'other' | 'core' | 'hero' | 'scenario' | 'story' | 'standard' | 'expert' | 'hero_special' | 'evidence' | 'leader' | 'main_scheme';
 
@@ -12,6 +12,13 @@ export type CardSet = {
   size?: number | null;
 }
 
+export type SetFilters = {
+  setCodes?: string[];
+  villainCode?: string;
+  type?: CardSetType;
+  packCode?: string;
+};
+
 function toCardSetRow(row: typeof setsTable.$inferSelect): CardSet {
   return {
     code: row.code,
@@ -23,9 +30,42 @@ function toCardSetRow(row: typeof setsTable.$inferSelect): CardSet {
   };
 }
 
-export async function getAllSets() {
-  const result = await db.select().from(setsTable);
+function buildSetWhereConditions(filters: SetFilters) {
+  const conditions = [];
+
+  if (filters.setCodes?.length) {
+    conditions.push(inArray(setsTable.code, filters.setCodes));
+  }
+
+  if (filters.villainCode) {
+    conditions.push(eq(setsTable.code, filters.villainCode));
+  }
+
+  if (filters.type) {
+    conditions.push(eq(setsTable.setType, filters.type));
+  }
+
+  if (filters.packCode) {
+    conditions.push(eq(setsTable.packCode, filters.packCode));
+  }
+
+  return conditions.length > 0 ? and(...conditions) : undefined;
+}
+
+export async function getSets(filters: SetFilters = {}) {
+  const whereConditions = buildSetWhereConditions(filters);
+  const query = db.select().from(setsTable).orderBy(setsTable.firstCardCode);
+
+  if (whereConditions) {
+    query.where(whereConditions);
+  }
+
+  const result = await query;
   return result.map(toCardSetRow);
+}
+
+export async function getAllSets() {
+  return getSets();
 }
 
 export async function getAllSetCodes() {
@@ -39,8 +79,7 @@ export async function getSetByCode(code: string) {
 }
 
 export async function getSetsByType(type: CardSetType) {
-  const result = await db.select().from(setsTable).where(eq(setsTable.setType, type));
-  return result.map(toCardSetRow);
+  return getSets({ type });
 }
 
 export async function getAllSetTypes() {
