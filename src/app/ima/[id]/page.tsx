@@ -2,6 +2,8 @@ import { getIMAByID, IMA } from "@/lib/imas/imas";
 import { getSetByCode } from "@/lib/sets/sets";
 import { notFound } from "next/navigation";
 import { CardSetNameWithCode } from "@/components/CardSetName";
+import SetFigureUse, { SetFigureSkeleton } from "@/components/set/SetFigure";
+import Postit from "@/components/Postit";
 
 type Params = { id: string };
 
@@ -22,41 +24,55 @@ export default async function IMADetailPage({
   const villain = await getSetByCode(ima.villain_code);
 
   return (
-    <section className="mx-auto max-w-3xl p-6 bg-blue-50 text-black rounded">
-      <h1 className="text-2xl font-bold mb-3">{ima.title}</h1>
-      <p className="mb-2">
+    <section className="mx-auto max-w-3xl p-6 bg-folder text-black rounded">
+      <p className="mb-6 typewritter mb-6">
         <span className="font-semibold">ID:</span> {ima.id}
       </p>
-      <p className="mb-2">
-        <span className="font-semibold">Slug:</span> {ima.slug}
-      </p>
-      <p className="mb-2">
-        <span className="font-semibold">Villain:</span> {villain ? <CardSetNameWithCode set={villain} /> : "Unknown"} ({ima.villain_code})
-      </p>
-      <p className="mb-2">
-        <span className="font-semibold">Author:</span> {ima.author_username}
-      </p>
-      <p className="mb-2">
-        <span className="font-semibold">Original:</span> {ima.original ? "Yes" : "No"}
-      </p>
-      {ima.source_url && (
-        <p className="mb-4">
-          <span className="font-semibold">Source:</span>{" "}
-          <a className="underline" href={ima.source_url} target="_blank" rel="noreferrer">
-            {ima.source_url}
-          </a>
-        </p>
-      )}
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-1">Description</h2>
-        <p>{ima.description}</p>
+      <header className="flex justify-center items-center gap-6 mb-12">
+        <Postit color="danger">
+          <h1 className="text-2xl font-bold">{ima.title}</h1>
+          {villain && (
+            <SetFigureUse code={villain.code} width={200} height={200} className="mb-4 shadow-lg hover:shadow-md mt-6" />
+          )}
+        </Postit>
+      </header>
+      <div className="flex flex-wrap justify-center gap-4 p-6">
+        {ima.modular_set_codes.map((code) => (
+          <SetFigureUse key={code} code={code} width={100} height={100} className="shadow-md hover:shadow-sm" dataTitle={code} />
+        ))}
       </div>
-      {ima.special_rules && (
-        <div>
-          <h2 className="text-lg font-semibold mb-1">Special Rules</h2>
-          <p>{ima.special_rules}</p>
+      <div className="content bg-white p-6 rounded shadow">
+        <p className="mb-2">
+          <span className="font-semibold">Slug:</span> {ima.slug}
+        </p>
+        <p className="mb-2">
+          <span className="font-semibold">Villain:</span> {villain ? <CardSetNameWithCode set={villain} /> : "Unknown"} ({ima.villain_code})
+        </p>
+        <p className="mb-2">
+          <span className="font-semibold">Author:</span> {ima.author_username}
+        </p>
+        <p className="mb-2">
+          <span className="font-semibold">Original:</span> {ima.original ? "Yes" : "No"}
+        </p>
+        {ima.source_url && (
+          <p className="mb-4">
+            <span className="font-semibold">Source:</span>{" "}
+            <a className="underline" href={ima.source_url} target="_blank" rel="noreferrer">
+              {ima.source_url}
+            </a>
+          </p>
+        )}
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-1">Description</h2>
+          <p>{ima.description}</p>
         </div>
-      )}
+        {ima.special_rules && (
+          <div>
+            <h2 className="text-lg font-semibold mb-1">Special Rules</h2>
+            <p>{ima.special_rules}</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
