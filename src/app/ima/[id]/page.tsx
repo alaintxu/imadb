@@ -2,7 +2,7 @@ import { getIMAByID, IMA } from "@/lib/imas/imas";
 import { getSetByCode } from "@/lib/sets/sets";
 import { notFound } from "next/navigation";
 import { CardSetNameWithCode } from "@/components/CardSetName";
-import SetFigureUse, { SetFigureSkeleton } from "@/components/set/SetFigure";
+import SetFigureUse from "@/components/set/SetFigure";
 import Postit from "@/components/Postit";
 
 type Params = { id: string };
